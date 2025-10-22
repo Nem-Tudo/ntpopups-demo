@@ -48,6 +48,10 @@ export default function Home() {
             <button onClick={() => openPopup("confirm", { timeout: 5000, data: { message: "Tenho só 5s de vida :(", title: "confirma isso?" } })}>confirm</button>
             <span>timeout: 5000 (popup fecha dps de 5s)</span>
           </div>
+         <div>
+            <button onClick={() => openPopup("confirm", { requireAction: true, data: {cancelLabel: "Sim", confirmLabel: "Claro", message: "hahaha vai ter q responder", title: "Você é gay?" } })}>confirm</button>
+            <span>requireAction: true (usuário TEM q fazer alguma ação)</span>
+          </div>
           <div>
             <button onClick={() => {
               openPopup("generic", { data: { message: "Espereeeeeeeeeeeeeeeeeeeee um pouco" } });
