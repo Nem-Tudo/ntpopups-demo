@@ -48,8 +48,8 @@ export default function Home() {
             <button onClick={() => openPopup("confirm", { timeout: 5000, data: { message: "Tenho só 5s de vida :(", title: "confirma isso?" } })}>confirm</button>
             <span>timeout: 5000 (popup fecha dps de 5s)</span>
           </div>
-         <div>
-            <button onClick={() => openPopup("confirm", { requireAction: true, data: {cancelLabel: "Sim", confirmLabel: "Claro", message: "hahaha vai ter q responder", title: "Você é gay?" } })}>confirm</button>
+          <div>
+            <button onClick={() => openPopup("confirm", { requireAction: true, data: { cancelLabel: "Sim", confirmLabel: "Claro", message: "hahaha vai ter q responder", title: "Você é gay?" } })}>confirm</button>
             <span>requireAction: true (usuário TEM q fazer alguma ação)</span>
           </div>
           <div>
@@ -70,8 +70,26 @@ export default function Home() {
             }}>generic</button>
             <span>keepLast: true (popup aberto NÃO some)</span>
           </div>
+          <div>
+            <button onClick={() => {
+              openPopup("generic", { allowPageBodyScroll: true, data: { message: "vc pode scrollar a página agr" } });
+            }}>generic</button>
+            <span>allowPageBodyScroll: true (permite scroll na página)</span>
+          </div>
+          <div>
+            <button onClick={() => {
+              openPopup("generic", { interactiveBackdrop: true, data: { message: "agr vc pode interagir com o fundo" } });
+            }}>generic</button>
+            <span>interactiveBackdrop: true (permite interação com o fundo)</span>
+          </div>
           <br />
           <h3>Visual (também é alteravel por css)</h3>
+          <div>
+            <button onClick={() => {
+              openPopup("generic", { hiddenBackdrop: true, data: { message: "Não tem fundo omg" } });
+            }}>generic</button>
+            <span>hiddenBackdrop: true (Remove o fundo)</span>
+          </div>
           <div>
             <button onClick={() => openPopup("generic", { hiddenFooter: true, data: { message: "Oi eu sou um popup sem footer", title: "Salve" } })}>generic</button>
             <span>hiddenFooter: true</span>
@@ -123,19 +141,294 @@ export default function Home() {
         <section>
           <h1>Configurações Especificas (de cada tipo)</h1>
           <h3>generic</h3>
-          <p>dps escrevo</p>
+          <div>
+            <button onClick={() => openPopup("generic")}>generic</button>
+            <span>Default</span>
+          </div>
+          <div>
+            <button onClick={() => openPopup("generic", { data: { title: "Oi eu sou o título" } })}>generic</button>
+            <span>title (texto ou elemento)</span>
+          </div>
+          <div>
+            <button onClick={() => openPopup("generic", { data: { message: "Oi eu sou a mensagem" } })}>generic</button>
+            <span>message (texto ou elemento)</span>
+          </div>
+          <div>
+            <button onClick={() => openPopup("generic", { data: { icon: "✅" } })}>generic</button>
+            <span>icon (texto ou elemento)</span>
+          </div>
+          <div>
+            <button onClick={() => openPopup("generic", { data: { closeLabel: "oi eu sou o closeLabel" } })}>generic</button>
+            <span>closeLabel (texto ou elemento)</span>
+          </div>
+          <div>
+            <button onClick={() => openPopup("generic", {
+              requireAction: true,
+              data:
+              {
+                icon: "✅",
+                title: "Novos termos",
+                message: <span>Nossos <a href="#">termos de serviço</a> foram atualizados!</span>,
+                closeLabel: "Entendi"
+              }
+            })}>generic</button>
+            <span>exemplo</span>
+          </div>
           <br />
           <h3>confirm</h3>
-          <p>dps escrevo</p>
+          <div>
+            <button onClick={() => openPopup("confirm")}>confirm</button>
+            <span>Default</span>
+          </div>
+          <div>
+            <button onClick={() => openPopup("confirm", {
+              data: {
+                title: "Oi eu sou o título"
+              }
+            })}>confirm</button>
+            <span>title</span>
+          </div>
+          <div>
+            <button onClick={() => openPopup("confirm", {
+              data: {
+                message: "Oi eu sou a mensagem"
+              }
+            })}>confirm</button>
+            <span>message</span>
+          </div>
+          <div>
+            <button onClick={() => openPopup("confirm", {
+              data: {
+                icon: "❓"
+              }
+            })}>confirm</button>
+            <span>icon</span>
+          </div>
+          <div>
+            <button onClick={() => openPopup("confirm", {
+              data: {
+                cancelLabel: "oi eu sou o cancelLabel"
+              }
+            })}>confirm</button>
+            <span>cancelLabel</span>
+          </div>
+          <div>
+            <button onClick={() => openPopup("confirm", {
+              data: {
+                confirmLabel: "oi eu sou o confirmLabel"
+              }
+            })}>confirm</button>
+            <span>confirmLabel</span>
+          </div>
+          <div>
+            <span>confirmStyle</span>
+            <button onClick={() => openPopup("confirm", {
+              data: {
+                confirmStyle: "Danger"
+              }
+            })}>"Danger"</button>
+            <button onClick={() => openPopup("confirm", {
+              data: {
+                confirmStyle: "Success"
+              }
+            })}>"Success"</button>
+            <button onClick={() => openPopup("confirm", {
+              data: {
+                confirmStyle: "Secondary"
+              }
+            })}>"Secondary"</button>
+          </div>
+          <div>
+            <button onClick={() => openPopup("confirm", {
+              data: {
+                onChoose: (choice) => alert(`Escolheu: ${choice ? "Confirmar" : "Cancelar"}`),
+              }
+            })}>confirm</button>
+            <span>onChoose()</span>
+          </div>
+          <div>
+            <button onClick={() => openPopup("confirm", {
+              data: {
+                confirmStyle: "Danger",
+                icon: "🗑",
+                title: "Excluir item",
+                message: "Tem certeza que deseja excluir este item?",
+                cancelLabel: "Cancelar",
+                confirmLabel: "Excluir",
+                onChoose: (choice) => choice && alert(`Excluído!`),
+              }
+            })}>confirm</button>
+            <span>exemplo</span>
+          </div>
           <br />
           <h3>form</h3>
-          <p>dps escrevo</p>
+          <div>
+            <button onClick={() => openPopup("form")}>form</button>
+            <span>Default</span>
+          </div>
+          <div>
+            <button onClick={() => openPopup("form",
+              {
+                data: {
+                  title: "Oi eu sou o título"
+                }
+              }
+            )}>form</button>
+            <span>title</span>
+          </div>
+          <div>
+            <button onClick={() => openPopup("form",
+              {
+                data: {
+                  message: "Oi eu sou a message",
+                }
+              }
+            )}>form</button>
+            <span>message</span>
+          </div>
+          <div>
+            <button onClick={() => openPopup("form",
+              {
+                data: {
+                  icon: "📩",
+                }
+              }
+            )}>form</button>
+            <span>icon</span>
+          </div>
+          <div>
+            <button onClick={() => openPopup("form",
+              {
+                data: {
+                  doneLabel: "aquii",
+                }
+              }
+            )}>form</button>
+            <span>doneLabel</span>
+          </div>
+          <h4>components tipos</h4>
+          <div>
+            <button onClick={() => openPopup("form",
+              {
+                data: {
+                  components: [
+                    { id: "01", type: "text", label: "label", placeholder: "placeholder" },
+                  ]
+                }
+              }
+            )}>form</button>
+            <span>text</span>
+          </div>
+          <div>
+            <button onClick={() => openPopup("form",
+              {
+                data: {
+                  components: [
+                    { id: "01", type: "textarea", label: "label", placeholder: "placeholder" },
+                  ]
+                }
+              }
+            )}>form</button>
+            <span>textarea</span>
+          </div>
+          <div>
+            <button onClick={() => openPopup("form",
+              {
+                data: {
+                  components: [
+                    { id: "01", type: "checkbox", label: "label", placeholder: "placeholder" },
+                  ]
+                }
+              }
+            )}>form</button>
+            <span>checkbox</span>
+          </div>
+          <div>
+            <button onClick={() => openPopup("form",
+              {
+                data: {
+                  components: [
+                    { id: "01", type: "file", label: "label", placeholder: "placeholder" },
+                  ]
+                }
+              }
+            )}>form</button>
+            <span>file</span>
+          </div>
+          <h4>components configurações</h4>
+          <div>
+            <button onClick={() => openPopup("form",
+              {
+                data: {
+                  components: [
+                    { id: "01", type: "text", label: "label", placeholder: "placeholder", defaultValue: "oiii"},
+                  ]
+                }
+              }
+            )}>form</button>
+            <span>defaultValue: "oiii"</span>
+          </div>
+          <div>
+            <button onClick={() => openPopup("form",
+              {
+                data: {
+                  components: [
+                    { id: "01", type: "text", label: "label", placeholder: "placeholder", required: true },
+                  ]
+                }
+              }
+            )}>form</button>
+            <span>required: true</span>
+          </div>
+          <div>
+            <button onClick={() => openPopup("form",
+              {
+                data: {
+                  components: [
+                    { id: "01", type: "text", label: "label", placeholder: "placeholder", minLength: 5 },
+                  ]
+                }
+              }
+            )}>form</button>
+            <span>minLength: 5</span>
+          </div>
+          <div>
+            <button onClick={() => openPopup("form",
+              {
+                data: {
+                  components: [
+                    { id: "01", type: "text", label: "label", placeholder: "placeholder", maxLength: 10 },
+                  ]
+                }
+              }
+            )}>form</button>
+            <span>maxLength: 10</span>
+          </div>
           <br />
           <h3>crop_image</h3>
           <p>dps escrevo</p>
           <br />
         </section>
-      </main>
+        <section>
+          <h1>scroll</h1>
+          <h1>scroll</h1>
+          <h1>scroll</h1>
+          <h1>scroll</h1>
+          <h1>scroll</h1>
+          <h1>scroll</h1>
+          <h1>scroll</h1>
+          <h1>scroll</h1>
+          <h1>scroll</h1>
+          <h1>scroll</h1>
+          <h1>scroll</h1>
+          <h1>scroll</h1>
+          <h1>scroll</h1>
+          <h1>scroll</h1>
+          <h1>scroll</h1>
+          <h1>scroll</h1>
+          <h1>scroll</h1>
+        </section>
+      </main >
     </>
   );
 }
