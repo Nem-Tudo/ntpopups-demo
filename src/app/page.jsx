@@ -32,6 +32,7 @@ export default function Home() {
 
           <button onClick={() => openPopup("crop_image", { data: { format: "circle", image: "/image02.png" } })}>crop_image (circle)</button>
           <button onClick={() => openPopup("crop_image", { data: { format: "square", image: "/image01.png" } })}>crop_image (square)</button>
+          <button onClick={() => openPopup("html", { data: { html: <h1 style={{ color: "black" }}>Hello world</h1> } })}>html</button>
         </section >
         <section>
           <h1>Configurações gerais (de TODOS os popups)</h1>
@@ -355,57 +356,235 @@ export default function Home() {
             )}>form</button>
             <span>file</span>
           </div>
+          <div>
+            <button onClick={() => openPopup("form",
+              {
+                data: {
+                  components: [
+                    { id: "01", type: "email", label: "label", placeholder: "placeholder" },
+                  ]
+                }
+              }
+            )}>form</button>
+            <span>email</span>
+          </div>
+          <div>
+            <button onClick={() => openPopup("form",
+              {
+                data: {
+                  components: [
+                    { id: "01", type: "date", label: "label", placeholder: "placeholder" },
+                  ]
+                }
+              }
+            )}>form</button>
+            <span>date</span>
+          </div>
+          <div>
+            <button onClick={() => openPopup("form",
+              {
+                data: {
+                  components: [
+                    { id: "01", type: "number", label: "label", placeholder: "placeholder" },
+                  ]
+                }
+              }
+            )}>form</button>
+            <span>number</span>
+          </div>
+          <div>
+            <button onClick={() => openPopup("form",
+              {
+                data: {
+                  components: [
+                    { id: "01", type: "password", label: "label", placeholder: "placeholder" },
+                  ]
+                }
+              }
+            )}>form</button>
+            <span>password</span>
+          </div>
+          <div>
+            <button onClick={() => openPopup("form",
+              {
+                data: {
+                  components: [
+                    { id: "01", type: "time", label: "label", placeholder: "placeholder" },
+                  ]
+                }
+              }
+            )}>form</button>
+            <span>time</span>
+          </div>
+          <div>
+            <button onClick={() => openPopup("form",
+              {
+                data: {
+                  components: [
+                    { id: "01", type: "radio", label: "Selecione", placeholder: "placeholder", options: ["Opção 1", "Opção 2"] },
+                  ]
+                }
+              }
+            )}>form</button>
+            <span>radio</span>
+          </div>
+          <div>
+            <button onClick={() => openPopup("form",
+              {
+                data: {
+                  components: [
+                    { id: "01", type: "select", label: "Selecione", placeholder: "placeholder", options: ["Opção 1", "Opção 2"] },
+                  ]
+                }
+              }
+            )}>form</button>
+            <span>select</span>
+          </div>
           <h4>components configurações</h4>
+          <br />
           <div>
-            <button onClick={() => openPopup("form",
-              {
-                data: {
-                  components: [
-                    { id: "01", type: "text", label: "label", placeholder: "placeholder", defaultValue: "oiii"},
-                  ]
+            <h4>text</h4>
+            <div>
+              <button onClick={() => openPopup("form",
+                {
+                  data: {
+                    components: [
+                      { id: "01", type: "text", label: "label", placeholder: "placeholder", defaultValue: "oiii" },
+                    ]
+                  }
                 }
-              }
-            )}>form</button>
-            <span>defaultValue: "oiii"</span>
+              )}>form</button>
+              <span>defaultValue: "oiii"</span>
+            </div>
+            <div>
+              <button onClick={() => openPopup("form",
+                {
+                  data: {
+                    components: [
+                      { id: "01", type: "text", label: "label", placeholder: "placeholder", required: true },
+                    ]
+                  }
+                }
+              )}>form</button>
+              <span>required: true</span>
+            </div>
+            <div>
+              <button onClick={() => openPopup("form",
+                {
+                  data: {
+                    components: [
+                      { id: "01", type: "text", label: "label", placeholder: "placeholder", minLength: 5 },
+                    ]
+                  }
+                }
+              )}>form</button>
+              <span>minLength: 5</span>
+            </div>
+            <div>
+              <button onClick={() => openPopup("form",
+                {
+                  data: {
+                    components: [
+                      { id: "01", type: "text", label: "label", placeholder: "placeholder", maxLength: 10 }
+                    ]
+                  }
+                }
+              )}>form</button>
+              <span>maxLength: 10</span>
+            </div>
+            <div>
+              <button onClick={() => openPopup("form",
+                {
+                  data: {
+                    components: [
+                      { id: "01", type: "text", label: "label", placeholder: "placeholder", matchRegex: /\bgato\b/ } //match regex texto tem q incluir "gato"
+                    ]
+                  }
+                }
+              )}>form</button>
+              <span>matchRegex: /\bgato\b/ (texto tem que incluir a palavra "gato")</span>
+            </div>
           </div>
           <div>
-            <button onClick={() => openPopup("form",
-              {
-                data: {
-                  components: [
-                    { id: "01", type: "text", label: "label", placeholder: "placeholder", required: true },
-                  ]
+            <h4>textarea</h4>
+            <div>
+              <button onClick={() => openPopup("form",
+                {
+                  data: {
+                    components: [
+                      { id: "01", type: "textarea", label: "label", placeholder: "placeholder", defaultValue: "oiii" },
+                    ]
+                  }
                 }
-              }
-            )}>form</button>
-            <span>required: true</span>
-          </div>
-          <div>
-            <button onClick={() => openPopup("form",
-              {
-                data: {
-                  components: [
-                    { id: "01", type: "text", label: "label", placeholder: "placeholder", minLength: 5 },
-                  ]
+              )}>form</button>
+              <span>defaultValue: "oiii"</span>
+            </div>
+            <div>
+              <button onClick={() => openPopup("form",
+                {
+                  data: {
+                    components: [
+                      { id: "01", type: "textarea", label: "label", placeholder: "placeholder", disableResize: true },
+                    ]
+                  }
                 }
-              }
-            )}>form</button>
-            <span>minLength: 5</span>
-          </div>
-          <div>
-            <button onClick={() => openPopup("form",
-              {
-                data: {
-                  components: [
-                    { id: "01", type: "text", label: "label", placeholder: "placeholder", maxLength: 10 },
-                  ]
+              )}>form</button>
+              <span>disableResize: true (usuario nao pode aumentar)</span>
+            </div>
+            <div>
+              <button onClick={() => openPopup("form",
+                {
+                  data: {
+                    components: [
+                      { id: "01", type: "textarea", label: "label", placeholder: "placeholder", required: true },
+                    ]
+                  }
                 }
-              }
-            )}>form</button>
-            <span>maxLength: 10</span>
+              )}>form</button>
+              <span>required: true</span>
+            </div>
+            <div>
+              <button onClick={() => openPopup("form",
+                {
+                  data: {
+                    components: [
+                      { id: "01", type: "textarea", label: "label", placeholder: "placeholder", minLength: 5 },
+                    ]
+                  }
+                }
+              )}>form</button>
+              <span>minLength: 5</span>
+            </div>
+            <div>
+              <button onClick={() => openPopup("form",
+                {
+                  data: {
+                    components: [
+                      { id: "01", type: "textarea", label: "label", placeholder: "placeholder", maxLength: 10 }
+                    ]
+                  }
+                }
+              )}>form</button>
+              <span>maxLength: 10</span>
+            </div>
+            <div>
+              <button onClick={() => openPopup("form",
+                {
+                  data: {
+                    components: [
+                      { id: "01", type: "textarea", label: "label", placeholder: "placeholder", matchRegex: /\bgato\b/ } //match regex texto tem q incluir "gato"
+                    ]
+                  }
+                }
+              )}>form</button>
+              <span>matchRegex: /\bgato\b/ (texto tem que incluir a palavra "gato")</span>
+            </div>
           </div>
           <br />
           <h3>crop_image</h3>
+          <p>dps escrevo</p>
+          <br />
+          <h3>html</h3>
           <p>dps escrevo</p>
           <br />
         </section>
