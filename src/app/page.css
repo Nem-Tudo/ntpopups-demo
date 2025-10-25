@@ -1,0 +1,651 @@
+.container {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f5f7fa 0%, #e8eef5 100%);
+    color: #1a1a2e;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.formwarn {
+    background-color: rgb(182, 182, 255);
+    border: #4f46e5;
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.header {
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    padding: 4rem 2rem;
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(99, 102, 241, 0.3);
+}
+
+.headerContent {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.logo {
+    font-size: 3.5rem;
+    font-weight: 800;
+    margin: 0;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.logoIcon {
+    font-size: 3rem;
+}
+
+.subtitle {
+    font-size: 1.25rem;
+    margin: 1rem 0 2rem;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.headerActions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.docLink {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.docLink:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+}
+
+.settingsSection {
+    padding: 3rem 2rem;
+    background: white;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.sectionContent {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.sectionTitle {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: #1a1a2e;
+    font-weight: 700;
+}
+
+.sectionDescription {
+    color: #666;
+    margin-bottom: 2rem;
+    font-size: 1.1rem;
+}
+
+.settingsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+}
+
+.settingGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.settingLabel {
+    font-weight: 600;
+    color: #333;
+    font-size: 0.95rem;
+}
+
+.buttonGroup {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.settingBtn {
+    flex: 1;
+    padding: 0.75rem;
+    background: #f5f5f5;
+    border: 2px solid #e0e0e0;
+    color: #333;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 600;
+}
+
+.settingBtn:hover {
+    background: #e8e8e8;
+    border-color: #6366f1;
+}
+
+.settingBtn.active {
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    border-color: #6366f1;
+    color: white;
+}
+
+.mainSection,
+.advancedSection,
+.formBuilderSection {
+    padding: 4rem 2rem;
+}
+
+.advancedSection {
+    background: #f9fafb;
+}
+
+/* --- ESTILOS DOS CARDS (mantidos) --- */
+.demoGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.5rem;
+}
+
+.demoCard {
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.demoCard:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 30px rgba(99, 102, 241, 0.15);
+    border-color: #6366f1;
+}
+
+.demoHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+    gap: 1rem;
+}
+
+.demoTitle {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0 0 0.5rem;
+    color: #1a1a2e;
+}
+
+.demoDescription {
+    font-size: 0.9rem;
+    color: #666;
+    margin: 0;
+}
+
+.codeToggle {
+    background: #f5f5f5;
+    border: 1px solid #e0e0e0;
+    padding: 0.5rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+}
+
+.codeToggle:hover {
+    background: #e8e8e8;
+    transform: scale(1.1);
+}
+
+/* --- EDITOR DE PROPS (DEMOS) --- */
+.propsEditor {
+    background: #f9fafb;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.propsTitle {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #6366f1;
+    margin: 0 0 1rem;
+}
+
+.demoBtn {
+    width: 100%;
+    padding: 0.75rem;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 1rem;
+}
+
+.demoBtn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(99, 102, 241, 0.4);
+}
+
+/* // ---------------------------------------------------------------------
+// --- ESTILOS DO FORM BUILDER (Lista de Componentes) ---
+// ---------------------------------------------------------------------
+*/
+
+.formBuilderSection {
+    background: white;
+    border-top: 1px solid #e0e0e0;
+}
+
+.mainPropsEditor {
+    background: white;
+    border: 1px solid #e5e7eb;
+    /* Borda mais suave */
+    margin-bottom: 2rem;
+}
+
+/* Regras de .propField, .propLabel, .propInput, .propGrid
+    são compartilhadas entre .propsEditor e .propertyEditorPanel.
+    As novas regras de UI serão aplicadas a ambos. */
+
+.formBuilderEditor {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    /* Coluna da lista | Coluna do editor */
+    gap: 1.5rem;
+    min-height: 710px;
+}
+
+.componentListPanel {
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    background: #f9fafb;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.componentListTitle {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #1a1a2e;
+    margin: 0 0 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.componentList {
+    flex-grow: 1;
+    overflow-y: auto;
+    max-height: 450px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.componentItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    background: white;
+    border: 1px solid #d0d0d0;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.componentItem small {
+    color: #777;
+    font-size: 0.8rem;
+}
+
+.componentItem:hover {
+    background: #f0f2ff;
+    border-color: #6366f1;
+}
+
+.componentItem.active {
+    background: #e0e7ff;
+    border-color: #6366f1;
+    box-shadow: 0 0 0 2px #6366f1;
+}
+
+.deleteBtn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.1rem;
+    opacity: 0.5;
+    transition: opacity 0.2s;
+}
+
+.deleteBtn:hover {
+    opacity: 1;
+    color: #ef4444;
+    /* red-500 */
+}
+
+.componentItem .deleteBtn {
+    font-size: 0.9rem;
+}
+
+.inlineGroup {
+    border: 1px dashed #b0b0b0;
+    border-radius: 8px;
+    background: #fdfdfd;
+}
+
+.inlineGroupHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    background: #f0f0f0;
+    border-bottom: 1px dashed #b0b0b0;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.inlineGroupContent {
+    padding: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    background-color: rgb(0 0 0 / 9%);
+}
+
+.componentItem.inline {
+    background: #f9f9f9;
+}
+
+.addComponentToolbar {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: auto;
+    /* Alinha no final */
+    padding-top: 1rem;
+    border-top: 1px solid #e0e0e0;
+}
+
+.addBtn {
+    color: #fff;
+    cursor: pointer;
+    background: #6366f1;
+    border: none;
+    border-radius: 6px;
+    padding: 0.5rem .55rem;
+    font-weight: 500;
+    min-width: 106px;
+}
+
+.addBtn.secondary {
+    background: #6b7280;
+    /* gray-500 */
+}
+
+.addBtn:hover {
+    opacity: 0.9;
+}
+
+.formBuilderActions {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    align-items: center;
+}
+
+.formBuilderActions .demoBtn {
+    margin-top: 0;
+    flex: 1;
+}
+
+/* // ---------------------------------------------------------------------
+// --- NOVOS ESTILOS: EDITOR DE PROPRIEDADES (Form Builder) ---
+// ---------------------------------------------------------------------
+*/
+
+.propertyEditorPanel {
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    background: white;
+    /* Fundo branco para destacar os inputs */
+    overflow-y: auto;
+    /* max-height: 600px; */
+}
+
+.propEditorPlaceholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: #888;
+    /* Mais sutil */
+    font-size: 1rem;
+    /* Um pouco menor */
+    text-align: center;
+    padding: 2rem;
+    font-style: italic;
+    /* Indica que é um placeholder */
+}
+
+.propEditorContent {
+    padding: 1.5rem;
+}
+
+.propEditorContent h4 {
+    margin: 0 0 0.25rem;
+    /* Menos margem inferior */
+    font-size: 1.25rem;
+    /* Mais destaque */
+    font-weight: 700;
+    /* Mais destaque */
+    color: #1a1a2e;
+}
+
+.propEditorContent h4 strong {
+    color: #6366f1;
+    font-family: monospace;
+}
+
+.propEditorTypeBadge {
+    display: inline-block;
+    background: #e0e7ff;
+    color: #4f46e5;
+    padding: 0.2rem 0.6rem;
+    border-radius: 99px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    /* Separa o header do conteúdo */
+}
+
+.propEditorHr {
+    border: 0;
+    border-top: 1px solid #e5e7eb;
+    /* Borda mais suave */
+    margin: 0 0 1.5rem 0;
+    /* Alinhado com a badge */
+}
+
+/* --- Estilos dos Inputs e Labels (Aplica-se a todos .prop*) --- */
+
+.propField {
+    margin-bottom: 1.25rem;
+    /* Mais espaço entre os campos */
+}
+
+.propLabel {
+    display: block;
+    font-size: 0.75rem;
+    /* Menor */
+    font-weight: 600;
+    /* Mais forte */
+    color: #6b7280;
+    /* Cinza (Tailwind gray-500) */
+    text-transform: uppercase;
+    /* Moderno */
+    letter-spacing: 0.05em;
+    /* Levemente espaçado */
+    margin-bottom: 0.35rem;
+    /* Mais perto do input */
+}
+
+.propInput {
+    width: 100%;
+    padding: 0.65rem 0.75rem;
+    /* Mais padding interno */
+    border: 1px solid #d1d5db;
+    /* Cinza (Tailwind gray-300) */
+    border-radius: 8px;
+    /* Mais arredondado */
+    font-size: 0.9rem;
+    background: #f9fafb;
+    /* Fundo levemente cinza */
+    color: #111827;
+    /* Preto (Tailwind gray-900) */
+    transition: all 0.2s ease;
+}
+
+.propInput:focus {
+    outline: none;
+    border-color: #6366f1;
+    background: white;
+    /* Sombra de foco moderna */
+    box-shadow: 0 0 0 3px #c7d2fe;
+    /* Azul (Tailwind indigo-200) */
+}
+
+.propInput[type="checkbox"] {
+    width: auto;
+}
+
+/* Estilo para Textarea (JSON, etc) */
+textarea.propInput {
+    font-family: "Fira Mono", "Roboto Mono", monospace;
+    font-size: 0.85rem;
+    min-height: 80px;
+    transition: none;
+    resize: vertical;
+}
+
+.propEditorContent textarea.propInput{
+    height: 200px;
+}
+
+.propInput:disabled {
+    background: #e5e7eb;
+    /* Cinza (Tailwind gray-200) */
+    color: #9ca3af;
+    /* Cinza (Tailwind gray-400) */
+    cursor: not-allowed;
+    border-color: #e5e7eb;
+}
+
+/* Grid para campos lado-a-lado (Min/Max) */
+.propGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    /* Mais espaço */
+    margin-bottom: 1.25rem;
+    /* Espaçamento do grupo */
+}
+
+.propGrid.threeCols {
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+/* Remove a margem de campos dentro de um grid */
+.propGrid .propField {
+    margin-bottom: 0;
+}
+
+/* --- Estilos dos Checkboxes (Required, Disabled, etc) --- */
+
+.propFieldCheck {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    background: #f9fafb;
+    border: 1px solid #e0e0e0;
+    padding: 0.75rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin: 0;
+    /* Reset de margem, o grid controla */
+}
+
+.propFieldCheck:hover {
+    background: #f0f2ff;
+    border-color: #c7d2fe;
+}
+
+.propFieldCheck span {
+    /* Alterado de 'label' para 'span' no JSX (ou 'label' se preferir) */
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #333;
+    user-select: none;
+    /* Impede seleção de texto */
+}
+
+.propFieldCheck input[type="checkbox"] {
+    width: 1.1rem;
+    height: 1.1rem;
+    cursor: pointer;
+    accent-color: #6366f1;
+    /* Cor de acentuação moderna */
+}
+
+/* --- MEDIA QUERIES (mantidos) --- */
+
+@media (max-width: 768px) {
+    .logo {
+        font-size: 2.5rem;
+    }
+
+    .sectionTitle {
+        font-size: 1.5rem;
+    }
+
+    .demoGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .settingsGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .formBuilderEditor {
+        grid-template-columns: 1fr;
+        /* Empilha as colunas em mobile */
+    }
+
+    .propertyEditorPanel {
+        min-height: 300px;
+    }
+
+    .propGrid,
+    .propGrid.threeCols {
+        grid-template-columns: 1fr;
+    }
+}

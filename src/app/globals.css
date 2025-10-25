@@ -33,3 +33,44 @@ a {
     color-scheme: dark;
   }
 }
+
+/*
+ * SCROLLBAR ESTILIZADO (Site Todo)
+ * Compatível com navegadores WebKit (Chrome, Safari, Edge, Opera) e Firefox.
+ */
+
+/* 1. Para navegadores WebKit (Chrome, Safari, Edge, Opera) */
+::-webkit-scrollbar {
+  width: 8px;
+  /* Largura da barra de rolagem vertical */
+  height: 8px;
+  /* Altura da barra de rolagem horizontal */
+}
+
+/* 2. O "trilho" (fundo) da barra de rolagem */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  /* Cor de fundo do trilho */
+  border-radius: 10px;
+}
+
+/* 3. O "polegar" (thumb) - a parte que você arrasta */
+::-webkit-scrollbar-thumb {
+  background: #747474;
+  /* Cor azul claro/roxo sutil (Tailwind indigo-200) */
+  border-radius: 10px;
+}
+
+/* 4. Cor do polegar ao passar o mouse */
+::-webkit-scrollbar-thumb:hover {
+  background: #8f8f8f;
+  /* Cor primária (Tailwind indigo-500) */
+}
+
+/* 5. Estilo para o Firefox (versões mais recentes) */
+html {
+  scrollbar-width: thin;
+  /* Define a largura da barra: auto | thin | none */
+  scrollbar-color: #a7a7a7 #f1f1f1;
+  /* cor_thumb cor_track */
+}
