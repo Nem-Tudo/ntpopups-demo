@@ -3,6 +3,10 @@ import { useState, useCallback } from "react";
 import useNtPopups from "ntpopups";
 import { usePopupSettings } from "../../contexts/PopupSettingsContext";
 
+// Importações do React Icons
+import { FaCopy, FaCheck, FaInfoCircle, FaQuestionCircle, FaEnvelope, FaCrop, FaHtml5, FaCog, FaMoon, FaSun, FaGlobe, FaChevronDown, FaChevronUp, FaTimes, FaTrashAlt, FaMagic, FaRocket, FaClock, FaBookOpen } from 'react-icons/fa';
+import { FaCode } from "react-icons/fa";
+
 // Importações da biblioteca react-simple-code-editor e Prism.js
 import Editor from "react-simple-code-editor";
 import Prism from "prismjs";
@@ -11,6 +15,11 @@ import Prism from "prismjs";
 import "prismjs/components/prism-clike";
 import "prismjs/components/prism-javascript";
 import "prismjs/themes/prism.css"; // Estilo claro padrão do Prism.js
+import Head from "next/head";
+
+
+import userPopupCode from "../../components/popups/MyUserPopup.txt"
+import buyPopupCode from "../../components/popups/MyBuyPopup.txt"
 
 // Função utilitária para escapar strings (mantida do código original)
 function escapeString(str) {
@@ -31,7 +40,7 @@ function randomString(length) {
 /**
  * Componente CodeBlock que utiliza react-simple-code-editor para visualização e cópia.
  */
-const CodeBlock = ({ code }) => {
+const CodeBlock = ({ code, fullHeight }) => {
   const [copied, setCopied] = useState(false);
 
   const copyToClipboard = useCallback(() => {
@@ -47,56 +56,25 @@ const CodeBlock = ({ code }) => {
     <div className="codeBlockContainer">
       <Editor
         value={code}
-        onValueChange={() => { }} // Não é editável, então a função é vazia
+        onValueChange={() => { }}
         highlight={highlight}
         padding={15}
-        disabled={true} // Torna o editor não interativo
         style={{
           fontFamily: '"Fira Mono", "Roboto Mono", monospace',
           fontSize: 12,
-          border: "1px solid #e0e0e0",
+          border: "1px solid #2d2d2d",
           borderRadius: "8px",
           minHeight: "100px",
-          backgroundColor: "#f9f9f9",
-          overflowX: "auto",
+          backgroundColor: "#1e1e1e", // Fundo escuro
+          color: "#d4d4d4", // Texto claro
+          overflow: "auto",
+          ...fullHeight ? { height: "100dvh", maxHeight: "100%" } : {}
         }}
       />
 
       <button onClick={copyToClipboard} className="copyButton">
-        {copied ? "✅ Copiado!" : "📋 Copiar"}
+        {copied ? <><FaCheck size={14} style={{ marginRight: '0.4rem' }} /> Copiado!</> : <><FaCopy size={14} style={{ marginRight: '0.4rem' }} /> Copiar</>}
       </button>
-
-      <style jsx>{`
-        .codeBlockContainer {
-          position: relative;
-          margin-top: 1rem;
-          margin-bottom: 0.5rem;
-          border-radius: 8px;
-          overflow: hidden;
-        }
-
-        .copyButton {
-          position: absolute;
-          top: 0.5rem;
-          right: 0.5rem;
-          padding: 0.3rem 0.6rem;
-          background: #e0e0e0;
-          color: #333;
-          border: none;
-          border-radius: 6px;
-          cursor: pointer;
-          font-size: 0.8rem;
-          font-weight: 500;
-          transition: all 0.2s ease;
-          opacity: 0.9;
-          z-index: 10;
-        }
-
-        .copyButton:hover {
-          background: #d4d4d4;
-          opacity: 1;
-        }
-      `}</style>
     </div>
   );
 };
@@ -105,7 +83,7 @@ const CodeBlock = ({ code }) => {
 // Componente Principal Home
 // ---------------------------------------------------------------------
 
-// --- Constantes para o Form Builder ---
+// --- Constantes para o Form Builder (mantidas) ---
 const componentTypes = [
   { value: 'text', label: 'Text Input' },
   { value: 'textarea', label: 'Textarea' },
@@ -159,7 +137,7 @@ export default function Home() {
     generic: {
       title: "Notificação",
       message: "Esta é uma mensagem informativa",
-      icon: "ℹ️",
+      icon: "ⓘ",
       closeLabel: "Fechar"
     },
     confirm: {
@@ -168,43 +146,78 @@ export default function Home() {
       icon: "❓",
       cancelLabel: "Cancelar",
       confirmLabel: "Confirmar",
-      confirmStyle: "default"
+      confirmStyle: "default",
+      onChoose: `(choice) => alert(choice ? "Confirmado!" : "Cancelado")`
     },
     form: {
       title: "Formulário Dinâmico",
       message: "",
-      icon: "📩",
-      doneLabel: "Enviar"
+      icon: "@",
+      doneLabel: "Enviar",
+      onSubmit: `(data) => alert(data)`,
+      onChange: `(data) => console.log(data)`
     },
     crop_image: {
       format: "circle",
       aspectRatio: "1:1",
       minZoom: 1,
       maxZoom: 4,
-      image: "https://cdn.nemtudo.me/f/nemtudo/MjAyNS8xMC8yNC9JTUFHRS8yMl8zOF80MF9fMTc2MTM1NjMyMDUyMi0zOTMyNzczMw.webp"
+      image: "https://cdn.nemtudo.me/f/nemtudo/MjAyNS8xMC8yNC9JTUFHRS8yMl8zOF80MF9fMTc2MTM1NjMyMDUyMi0zOTMyNzczMw.webp",
+      onCrop: `(data) => console.log(data)`
     },
     html: {
       html: `<div style={{ color: "black", padding: "20px", textAlign: "center" }}>
-              <h2 style={{ marginBottom: "10px" }}>🎉 Olá!</h2>
-              <p>Este é um popup com HTML totalmente customizado</p>
-              <button
-                onClick={() => closePopup(true)}
-                style={{
-                  marginTop: "15px",
-                  padding: "8px 16px",
-                  background: "#6366f1",
-                  color: "white",
-                  border: "none",
-                  borderRadius: "6px",
-                  cursor: "pointer"
-                }}
-              >
-                Fechar
-              </button>
-            </div>`
+              <h2 style={{ marginBottom: "10px" }}>🎉 Olá!</h2>
+              <p>Este é um popup com HTML totalmente customizado</p>
+              <button
+                onClick={() => closePopup(true)}
+                style={{
+                  marginTop: "15px",
+                  padding: "8px 16px",
+                  background: "#6366f1",
+                  color: "white",
+                  border: "none",
+                  borderRadius: "6px",
+                  cursor: "pointer"
+                }}
+              >
+                Fechar
+              </button>
+            </div>`
+    },
+    my_user_popup: {
+      userName: "João",
+      userId: "user_123456",
+      userBio: "Eu jogo Minecraft",
+      onAddFriend: "(id) => alert(`Novo amigo: ${id}`)"
+    },
+    my_buy_popup: {
+      productName: "Produto Exemplo",
+      productId: "prod_123",
+      productPrice: 99.90,
+      productImage: "/demo/image03.png",
+      productDescription: "Descrição detalhada do produto com suas principais características e benefícios.",
+      productStock: 10,
+      allowQuantityChange: true,
+      showShipping: true,
+      shippingPrice: 15.00,
+      freeShippingThreshold: 150.00,
+      acceptedPaymentMethods: ["Cartão de Crédito", "PIX"],
+      allowCoupon: true,
+      getCoupon: `async (code) => {
+  // Simulating your API delay
+  await new Promise(resolve => setTimeout(resolve, 500));
+
+  const coupons = {
+    "PERC10": { discount: 10, type: "percent" },
+    "FIX20": { discount: 20, type: "fixed" }
+  };
+
+  return coupons[code];
+},`,
+      onBuy: "(purchase) => alert(JSON.stringify(purchase))"
     }
   });
-
 
   // --- NOVOS ESTADOS PARA O FORM BUILDER ---
   const [formComponents, setFormComponents] = useState([
@@ -285,73 +298,87 @@ export default function Home() {
   const generateCode = (type) => {
     const props = popupProps[type];
 
+    const icon = props.icon;
+
     switch (type) {
       case 'generic':
         return `openPopup("generic", { 
-  data: { 
-    message: "${escapeString(props.message)}",
-    title: "${escapeString(props.title)}",
-    icon: "${escapeString(props.icon)}",
-    closeLabel: "${escapeString(props.closeLabel)}"
-  } 
+  data: { 
+    message: "${escapeString(props.message)}",
+    title: "${escapeString(props.title)}",
+    icon: "${escapeString(icon)}",
+    closeLabel: "${escapeString(props.closeLabel)}"
+  } 
 })`;
       case 'confirm':
         return `openPopup("confirm", { 
-  data: { 
-    message: "${escapeString(props.message)}",
-    title: "${escapeString(props.title)}",
-    icon: "${escapeString(props.icon)}",
-    cancelLabel: "${escapeString(props.cancelLabel)}",
-    confirmLabel: "${escapeString(props.confirmLabel)}",
-    confirmStyle: "${escapeString(props.confirmStyle)}",
-    onChoose: (choice) => alert(choice ? "Confirmado!" : "Cancelado")
-  } 
+  data: { 
+    message: "${escapeString(props.message)}",
+    title: "${escapeString(props.title)}",
+    icon: "${escapeString(icon)}",
+    cancelLabel: "${escapeString(props.cancelLabel)}",
+    confirmLabel: "${escapeString(props.confirmLabel)}",
+    confirmStyle: "${escapeString(props.confirmStyle)}",
+    onChoose: (choice) => alert(choice ? "Confirmado!" : "Cancelado")
+  } 
 })`;
       case 'form': // Este é o código do demo simples, não o builder
         return `openPopup("form", { 
-  data: { 
-    title: "${escapeString(props.title)}",
-    message: "${escapeString(props.message)}",
-    icon: "${escapeString(props.icon)}",
-    doneLabel: "${escapeString(props.doneLabel)}",
-    components: [
-      { id: "name", type: "text", label: "Nome", placeholder: "Seu nome", required: true },
-      { id: "email", type: "email", label: "E-mail", placeholder: "seu@email.com", required: false },
-    ],
-    onSubmit: (data) => console.log(data)
-  } 
+  data: { 
+    title: "${escapeString(props.title)}",
+    message: "${escapeString(props.message)}",
+    icon: "${escapeString(icon)}",
+    doneLabel: "${escapeString(props.doneLabel)}",
+    components: [
+      { id: "name", type: "text", label: "Nome", placeholder: "Seu nome", required: true },
+      { id: "email", type: "email", label: "E-mail", placeholder: "seu@email.com", required: false },
+    ],
+    onSubmit: (data) => alert(data),
+    onChange: (data) => console.log(data),
+  } 
 })`;
       case 'crop_image':
         return `openPopup("crop_image", { 
-  data: { 
-    image: "${escapeString(props.image || "/demo/image01.png")}",
-    format: "${escapeString(props.format)}",
-    aspectRatio: "${(popupProps.crop_image.format != "square") ? "1:1" : escapeString(props.aspectRatio)}",
-    minZoom: ${props.minZoom},
-    maxZoom: ${props.maxZoom},
-    onCrop: (data) => console.log(data)
-  } 
+  data: { 
+    image: "${escapeString(props.image || "/demo/image01.png")}",
+    format: "${escapeString(props.format)}",
+    aspectRatio: "${(popupProps.crop_image.format != "square") ? "1:1" : escapeString(props.aspectRatio)}",
+    minZoom: ${props.minZoom},
+    maxZoom: ${props.maxZoom},
+    onCrop: (data) => console.log(data)
+  } 
 })`;
       case 'html':
         return `openPopup("html", { 
-  data: { 
-    html: (
-      <div style={{ color: "black", padding: "20px", textAlign: "center" }}>
-        <h2 style={{ marginBottom: "10px" }}>🎉 Olá!</h2>
-        <p>Este é um popup com HTML totalmente customizado</p>
-        {/* Você deve usar closePopup(true) se a ação fechar o popup */}
-        <button onClick={() => closePopup(true)}>Fechar</button>
-      </div>
-    )
-  } 
+  data: { 
+    html: (
+      <div style={{ color: "black", padding: "20px", textAlign: "center" }}>
+        <h2 style={{ marginBottom: "10px" }}>🎉 Olá!</h2>
+        <p>Este é um popup com HTML totalmente customizado</p>
+        {/* Você deve usar closePopup(true) se a ação fechar o popup */}
+        <button onClick={() => closePopup(true)}>Fechar</button>
+      </div>
+    )
+  } 
 })`;
+      case 'my_user_popup':
+        return `
+// components/popups/MyUserPopup.jsx
+
+${userPopupCode}`
+
+      case 'my_buy_popup':
+        return `
+// components/popups/MyBuyPopup.jsx
+
+${buyPopupCode}`
       default:
         return '';
     }
   };
 
 
-  // --- NOVOS HANDLERS PARA O FORM BUILDER ---
+  // --- NOVOS HANDLERS PARA O FORM BUILDER (mantidos) ---
 
   const handleSelectComponent = (path) => {
     setSelectedComponentPath(path);
@@ -442,7 +469,10 @@ export default function Home() {
       }
       return newComponents;
     });
-    setSelectedComponentPath(null); // Desseleciona
+    if (JSON.stringify(path) === JSON.stringify(selectedComponentPath)) {
+      console.log(`Deleted selected component: ${path}`)
+      setSelectedComponentPath(null); // Desseleciona
+    }
   };
 
   // Helper para buscar o objeto do componente selecionado
@@ -460,6 +490,7 @@ export default function Home() {
   // Gera o código para o Form Builder
   const generateFormBuilderCode = () => {
     const props = popupProps.form;
+    const icon = props.icon;
 
     // Custom stringifier para lidar com datas (que podem estar como string)
     const replacer = (key, value) => {
@@ -484,21 +515,21 @@ export default function Home() {
     componentsString = componentsString.replace(/"new Date\('([^']*)'\)"/g, "new Date('$1')");
 
     return `openPopup("form", {
-  data: {
-    title: "${escapeString(props.title)}",
-    message: "${escapeString(props.message)}",
-    icon: "${escapeString(props.icon)}",
-    doneLabel: "${escapeString(props.doneLabel)}",
-    components: ${componentsString},
-    onSubmit: (data) => {
-      console.log('Form data:', data);
-      alert('Dados enviados: ' + JSON.stringify(data));
-    },
-    onChange: ({ changedComponentState, formState }) => {
-      console.log('Changed component:', changedComponentState.id);
-      console.log('Current form values:', formState.values);
-    }
-  }
+  data: {
+    title: "${escapeString(props.title)}",
+    message: "${escapeString(props.message)}",
+    icon: "${escapeString(icon)}",
+    doneLabel: "${escapeString(props.doneLabel)}",
+    components: ${componentsString},
+    onSubmit: (data) => {
+      console.log('Form data:', data);
+      alert('Dados enviados: ' + JSON.stringify(data));
+    },
+    onChange: ({ changedComponentState, formState }) => {
+      console.log('Changed component:', changedComponentState.id);
+      console.log('Current form values:', formState.values);
+    }
+  }
 });`;
   };
 
@@ -556,6 +587,7 @@ export default function Home() {
         <div className="propField">
           <label className="propLabel">ID (Chave Única)</label>
           <input type="text" value={component.id || ''} onChange={(e) => handlePropChange(path, 'id', e, 'string')} className="propInput" />
+          {component.id && formComponents.some(c => c.id === component.id && c !== component) && <p className="errorText">ID duplicado!</p>}
         </div>
         <div className="propField">
           <label className="propLabel">Label</label>
@@ -572,7 +604,7 @@ export default function Home() {
           </label>
         </div>
 
-        {/* Propriedades com base no Tipo */}
+        {/* Propriedades com base no Tipo (mantidas) */}
         {['text', 'textarea', 'email', 'number', 'password'].includes(type) && (
           <div className="propField">
             <label className="propLabel">Placeholder</label>
@@ -615,7 +647,7 @@ export default function Home() {
           )}
         </div>
 
-        {/* Propriedades Específicas */}
+        {/* Propriedades Específicas (mantidas) */}
         {(type === 'text' || type === 'textarea' || type === 'password') && (
           <div className="propGrid">
             <div className="propField">
@@ -657,7 +689,7 @@ export default function Home() {
               onChange={(e) => handlePropChange(path, 'options', e, 'json')}
               className="propInput"
               rows={4}
-              placeholder={`Ex: ["Opção 1", "Opção 2"]\n\nOu:\n\n[\n  {"label": "Opção A", "value": "a"},\n  {"label": "Opção B", "value": "b"}\n]`}
+              placeholder={`Ex: ["Opção 1", "Opção 2"]\n\nOu:\n\n[\n  {"label": "Opção A", "value": "a"},\n  {"label": "Opção B", "value": "b"}\n]`}
             />
           </div>
         )}
@@ -701,7 +733,7 @@ export default function Home() {
           data: {
             message: props.message,
             title: props.title,
-            icon: props.icon,
+            icon: props.icon, // string 'i'
             closeLabel: props.closeLabel
           }
         });
@@ -724,7 +756,7 @@ export default function Home() {
           data: {
             message: props.message,
             title: props.title,
-            icon: props.icon,
+            icon: props.icon, // string '?'
             cancelLabel: props.cancelLabel,
             confirmLabel: props.confirmLabel,
             confirmStyle: props.confirmStyle,
@@ -738,7 +770,8 @@ export default function Home() {
         { key: "icon", label: "Icon", type: "text" },
         { key: "cancelLabel", label: "Cancel Label", type: "text" },
         { key: "confirmLabel", label: "Confirm Label", type: "text" },
-        { key: "confirmStyle", label: "Confirm Style", type: "select", options: ["default", "Secondary", "Success", "Danger"] }
+        { key: "confirmStyle", label: "Confirm Style", type: "select", options: ["default", "Secondary", "Success", "Danger"] },
+        { disabled: true, key: "onChoose", label: "Ação ao escolher", type: "textarea" },
       ]
     },
     {
@@ -753,13 +786,14 @@ export default function Home() {
           data: {
             title: props.title,
             message: props.message,
-            icon: props.icon,
+            icon: props.icon, // string '@'
             doneLabel: props.doneLabel,
             components: [
               { id: "name", type: "text", label: "Nome", placeholder: "Seu nome", required: true },
               { id: "email", type: "email", label: "E-mail", placeholder: "seu@email.com", required: false },
             ],
-            onSubmit: (data) => alert(`Dados enviados: ${JSON.stringify(data)}`)
+            onSubmit: (data) => alert(JSON.stringify(data)),
+            onChange: (data) => console.log(data),
           }
         });
       },
@@ -767,7 +801,9 @@ export default function Home() {
         { key: "title", label: "Title", type: "text" },
         { key: "message", label: "Message", type: "textarea" },
         { key: "icon", label: "Icon", type: "text" },
-        { key: "doneLabel", label: "Done Label", type: "text" }
+        { key: "doneLabel", label: "Done Label", type: "text" },
+        { disabled: true, key: "onSubmit", label: "Ação ao enviar", type: "textarea" },
+        { disabled: true, key: "onChange", label: "Ação ao preencher", type: "textarea" },
       ]
     },
     {
@@ -784,7 +820,7 @@ export default function Home() {
             minZoom: props.minZoom,
             maxZoom: props.maxZoom,
             image: props.image,
-            onCrop: (data) => console.log("Imagem recortada:", data)
+            onCrop: (data) => alert(data)
           }
         });
       },
@@ -793,7 +829,8 @@ export default function Home() {
         { key: "format", label: "Format", type: "select", options: ["circle", "square"] },
         { key: "aspectRatio", label: "Aspect Ratio", type: "text" },
         { key: "minZoom", label: "Min Zoom", type: "number" },
-        { key: "maxZoom", label: "Max Zoom", type: "number" }
+        { key: "maxZoom", label: "Max Zoom", type: "number" },
+        { disabled: true, key: "onCrop", label: "Ação ao confirmar corte", type: "textarea" },
       ]
     },
     {
@@ -830,6 +867,80 @@ export default function Home() {
       properties: [
         { disabled: true, key: "html", label: "HTML", type: "text" }
       ]
+    },
+    {
+      id: "custom-simple",
+      title: "Custom Popup",
+      description: "User profile (simple example)",
+      type: "my_user_popup",
+      action: () => {
+        const props = popupProps.my_user_popup;
+        openPopup("my_user_popup", {
+          data: {
+            userId: props.userId,
+            userName: props.userName,
+            userBio: props.userBio,
+            onAddFriend: (id) => alert(`Novo amigo: ${id}`)
+          }
+        });
+      },
+      properties: [
+        { key: "userId", label: "Id do usuário", type: "text" },
+        { key: "userName", label: "Nome do usuário", type: "text" },
+        { key: "userBio", label: "Bio do usuário", type: "text" },
+        { disabled: true, key: "onAddFriend", label: "Ação ao adicionar amigo", type: "text" },
+      ]
+    },
+    {
+      id: "custom-complex",
+      title: "Custom Popup",
+      description: "Buy product (complete example)",
+      type: "my_buy_popup",
+      action: () => {
+        const props = popupProps.my_buy_popup;
+        openPopup("my_buy_popup", {
+          data: {
+            productName: props.productName,
+            productId: props.productId,
+            productPrice: props.productPrice,
+            productImage: props.productImage,
+            productDescription: props.productDescription,
+            productStock: props.productStock,
+            allowQuantityChange: props.allowQuantityChange,
+            showShipping: props.showShipping,
+            shippingPrice: props.shippingPrice,
+            freeShippingThreshold: props.freeShippingThreshold,
+            acceptedPaymentMethods: props.acceptedPaymentMethods,
+            allowCoupon: props.allowCoupon,
+            getCoupon: async (code) => {
+              await new Promise(resolve => setTimeout(resolve, 500));
+
+              const coupons = {
+                "PERC10": { discount: 10, type: "percent" },
+                "FIX20": { discount: 20, type: "fixed" }
+              };
+              return coupons[code];
+            },
+            onBuy: (purchase) => alert(JSON.stringify(purchase))
+          }
+        });
+      },
+      properties: [
+        { key: "productName", label: "Nome do Produto", type: "text" },
+        { key: "productId", label: "ID do Produto", type: "text" },
+        { key: "productPrice", label: "Preço do Produto", type: "number" },
+        { key: "productImage", label: "URL da Imagem", type: "text" },
+        { key: "productDescription", label: "Descrição do Produto", type: "textarea" },
+        { key: "productStock", label: "Estoque", type: "number" },
+        { key: "allowQuantityChange", label: "Permitir Alterar Quantidade", type: "boolean" },
+        { key: "showShipping", label: "Ativar Frete", type: "boolean" },
+        { key: "shippingPrice", label: "Preço do Frete", type: "number" },
+        { key: "freeShippingThreshold", label: "Valor Mínimo para Frete Grátis", type: "number" },
+        { key: "acceptedPaymentMethods", label: "Métodos de Pagamento Aceitos", type: "array" },
+        { key: "allowCoupon", label: "Permitir Cupom", type: "boolean" },
+        { disabled: true, key: "getCoupon", label: "Lógica de obter cupom", type: "textarea" },
+        { disabled: true, key: "onBuy", label: "Ação ao comprar", type: "textarea" }
+      ]
     }
   ];
 
@@ -846,11 +957,11 @@ export default function Home() {
         }
       }),
       code: `openPopup("confirm", { 
-  closeOnEscape: false,
-  data: { 
-    message: "Não é possível fechar com ESC",
-    title: "Popup bloqueado"
-  } 
+  closeOnEscape: false,
+  data: { 
+    message: "Não é possível fechar com ESC",
+    title: "Popup bloqueado"
+  } 
 })`
     },
     {
@@ -864,10 +975,10 @@ export default function Home() {
         }
       }),
       code: `openPopup("confirm", { 
-  closeOnClickOutside: false,
-  data: { 
-    message: "Você não pode fechar este popup clicando fora dele",
-  } 
+  closeOnClickOutside: false,
+  data: { 
+    message: "Você não pode fechar este popup clicando fora dele",
+  } 
 })`
     },
     {
@@ -878,14 +989,16 @@ export default function Home() {
         timeout: 5000,
         data: {
           message: "Este popup será fechado automaticamente em 5 segundos",
-          title: "⏱️ Temporizador"
+          title: "Temporizador",
+          icon: "clock" // string customizada
         }
       }),
       code: `openPopup("generic", { 
-  timeout: 5000,
-  data: { 
-    message: "Fecha em 5 segundos"
-  } 
+  timeout: 5000,
+  data: { 
+    message: "Fecha em 5 segundos",
+    icon: "clock"
+  } 
 })`
     },
     {
@@ -902,10 +1015,10 @@ export default function Home() {
         }
       }),
       code: `openPopup("confirm", { 
-  requireAction: true,
-  data: { 
-    message: "Você deve escolher uma opção"
-  } 
+  requireAction: true,
+  data: { 
+    message: "Você deve escolher uma opção"
+  } 
 })`
     },
     {
@@ -923,14 +1036,14 @@ export default function Home() {
         }, 3000);
       },
       code: `openPopup("generic", { 
-  data: { message: "Popup 1" } 
+  data: { message: "Popup 1" } 
 });
 
 setTimeout(() => {
-  openPopup("generic", { 
-    keepLast: false,
-    data: { title: "Popup 2" } 
-  });
+  openPopup("generic", { 
+    keepLast: false,
+    data: { title: "Popup 2" } 
+  });
 }, 3000);`
     },
     {
@@ -948,14 +1061,14 @@ setTimeout(() => {
         }, 3000);
       },
       code: `openPopup("generic", { 
-  data: { message: "Popup 1" } 
+  data: { message: "Popup 1" } 
 });
 
 setTimeout(() => {
-  openPopup("generic", { 
-    keepLast: true,
-    data: { title: "Popup 2" } 
-  });
+  openPopup("generic", { 
+    keepLast: true,
+    data: { title: "Popup 2" } 
+  });
 }, 3000);`
     },
     {
@@ -970,10 +1083,10 @@ setTimeout(() => {
         }
       }),
       code: `openPopup("generic", {
-  allowPageBodyScroll: true,
-  data: {
-    message: "Scroll habilitado"
-  }
+  allowPageBodyScroll: true,
+  data: {
+    message: "Scroll habilitado"
+  }
 })`
     },
     {
@@ -988,10 +1101,10 @@ setTimeout(() => {
         }
       }),
       code: `openPopup("generic", { 
-  interactiveBackdrop: true,
-  data: { 
-    message: "Fundo interativo"
-  } 
+  interactiveBackdrop: true,
+  data: { 
+    message: "Fundo interativo"
+  } 
 })`
     },
     {
@@ -1006,10 +1119,10 @@ setTimeout(() => {
         }
       }),
       code: `openPopup("generic", { 
-  hiddenBackdrop: true,
-  data: { 
-    message: "Sem fundo escuro"
-  } 
+  hiddenBackdrop: true,
+  data: { 
+    message: "Sem fundo escuro"
+  } 
 })`
     },
     {
@@ -1024,10 +1137,10 @@ setTimeout(() => {
         }
       }),
       code: `openPopup("generic", { 
-  hiddenFooter: true,
-  data: { 
-    message: "Sem rodapé"
-  } 
+  hiddenFooter: true,
+  data: { 
+    message: "Sem rodapé"
+  } 
 })`
     },
     {
@@ -1042,10 +1155,10 @@ setTimeout(() => {
         }
       }),
       code: `openPopup("generic", { 
-  hiddenHeader: true,
-  data: { 
-    message: "Sem cabeçalho"
-  } 
+  hiddenHeader: true,
+  data: { 
+    message: "Sem cabeçalho"
+  } 
 })`
     },
     {
@@ -1060,10 +1173,10 @@ setTimeout(() => {
         }
       }),
       code: `openPopup("generic", { 
-  disableOpenAnimation: true,
-  data: { 
-    message: "Sem animação de abertura"
-  } 
+  disableOpenAnimation: true,
+  data: { 
+    message: "Sem animação de abertura"
+  } 
 })`
     },
     {
@@ -1078,10 +1191,10 @@ setTimeout(() => {
         }
       }),
       code: `openPopup("generic", { 
-  maxWidth: "400px",
-  data: { 
-    message: "Máx. 400px"
-  } 
+  maxWidth: "400px",
+  data: { 
+    message: "Máx. 400px"
+  } 
 })`
     },
     {
@@ -1096,11 +1209,11 @@ setTimeout(() => {
         }
       }),
       code: `openPopup("generic", { 
-  minWidth: "100px",
-  data: { 
-    title: "Min",
-    message: "100px"
-  } 
+  minWidth: "100px",
+  data: { 
+    title: "Min",
+    message: "100px"
+  } 
 })`
     },
     {
@@ -1115,10 +1228,10 @@ setTimeout(() => {
         }
       }),
       code: `openPopup("generic", { 
-  onOpen: (popup) => alert(\`Popup aberto! ID: \${popup.id}\`),
-  data: { 
-    message: "Callback onOpen() executado"
-  } 
+  onOpen: (popup) => alert(\`Popup aberto! ID: \${popup.id}\`),
+  data: { 
+    message: "Callback onOpen() executado"
+  } 
 })`
     },
     {
@@ -1133,10 +1246,10 @@ setTimeout(() => {
         }
       }),
       code: `openPopup("confirm", { 
-  onClose: (hasAction, id) => alert(\`Popup fechado! Teve ação (confirm/cancel): \${hasAction ? "Sim" : "Não"}\`),
-  data: { 
-    title: "Callback de Fechamento"
-  } 
+  onClose: (hasAction, id) => alert(\`Popup fechado! Teve ação (confirm/cancel): \${hasAction ? "Sim" : "Não"}\`),
+  data: { 
+    title: "Callback de Fechamento"
+  } 
 })`
     },
     {
@@ -1148,7 +1261,7 @@ setTimeout(() => {
           onClose: () => stopInterval(),
           data: {
             title: "Cronômetro",
-            icon: "⏱️",
+            icon: "clock", // string customizada
             message: "Iniciando...",
           }
         });
@@ -1169,363 +1282,439 @@ setTimeout(() => {
         }
       },
       code: `const popup = await openPopup("generic", {
-        onClose: () => stopInterval(),
-        data: {
-          title: "Cronômetro",
-          icon: "⏱️",
-          message: "Iniciando...",
-        }
-      });
+        onClose: () => stopInterval(),
+        data: {
+          title: "Cronômetro",
+          icon: "clock",
+          message: "Iniciando...",
+        }
+      });
 
-      let count = 0;
-      const interval = setInterval(() => {
-        count++;
-        updatePopup(popup.id, {
-          data: {
-            ...popup.settings.data,
-            message: \`\${count}s\`,
-          }
-        });
-      }, 1000);
+      let count = 0;
+      const interval = setInterval(() => {
+        count++;
+        updatePopup(popup.id, {
+          data: {
+            ...popup.settings.data,
+            message: \`\${count}s\`,
+          }
+        });
+      }, 1000);
 
-      function stopInterval() { // Boa prática: Garanta que o interval seja limpo ao fechar
-        clearInterval(interval);
-      }`
+      function stopInterval() { // Boa prática: Garanta que o interval seja limpo ao fechar
+        clearInterval(interval);
+      }`
     }
   ];
 
   return (
-    <div className="container">
-      <header className="header">
-        <div className="headerContent">
-          <h1 className="logo">
-            <span className="logoIcon">✨</span>
-            ntPopups
-          </h1>
-          <p className="subtitle">Biblioteca moderna de popups para React</p>
-          <div className="headerActions">
-            <a
-              href="https://ntpopups.nemtudo.me"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="docLink"
-            >
-              📚 Documentação completa
-            </a>
-          </div>
-        </div>
-      </header>
-
-      <section className="settingsSection">
-        <div className="sectionContent">
-          <h2 className="sectionTitle">⚙️ Configurações Globais</h2>
-          <div className="settingsGrid">
-            <div className="settingGroup">
-              <span className="settingLabel">Tema do Popup</span>
-              <div className="buttonGroup">
-                <button
-                  onClick={() => changeTheme("dark")}
-                  className={`settingBtn ${currentTheme === "dark" ? "active" : ""}`}
-                >
-                  🌙 Dark
-                </button>
-                <button
-                  onClick={() => changeTheme("white")}
-                  className={`settingBtn ${currentTheme === "white" ? "active" : ""}`}
-                >
-                  ☀️ Light
-                </button>
-              </div>
-            </div>
-            <div className="settingGroup">
-              <span className="settingLabel">Idioma</span>
-              <div className="buttonGroup">
-                <button
-                  onClick={() => changeLang("ptbr")}
-                  className={`settingBtn ${currentLang === "ptbr" ? "active" : ""}`}
-                >
-                  🇧🇷 PT-BR
-                </button>
-                <button
-                  onClick={() => changeLang("en")}
-                  className={`settingBtn ${currentLang === "en" ? "active" : ""}`}
-                >
-                  🇺🇸 EN
-                </button>
-              </div>
+    <>
+      <Head>
+        <title>NtPopups Demo</title>
+      </Head>
+      <div className="container">
+        <header className="header">
+          <div className="headerContent">
+            <h1 className="logo">
+              <span className="logoIcon"><FaMagic /></span>
+              ntPopups
+            </h1>
+            <p className="subtitle">Biblioteca moderna de popups para React</p>
+            <div className="headerActions">
+              <a
+                href="https://ntpopups.nemtudo.me"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="docLink"
+              >
+                <FaBookOpen size={16} /> Ver documentação completa
+              </a>
             </div>
           </div>
-        </div>
-      </section>
+        </header>
 
-      <section className="mainSection">
-        <div className="sectionContent">
-          <h2 className="sectionTitle">🎯 Tipos de Popup</h2>
-          <p className="sectionDescription">
-            Explore os diferentes tipos de popups pré-definidos.
-          </p>
-          <div className="demoGrid">
-            {demos.map(demo => (
-              <div key={demo.id} className="demoCard">
-                <div className="demoHeader">
-                  <div>
-                    <h3 className="demoTitle">{demo.title}</h3>
-                    <p className="demoDescription">{demo.description}</p>
-                  </div>
-                  <div style={{ display: "flex", gap: "0.5rem" }}>
-                    <button
-                      onClick={() => toggleProps(demo.id)}
-                      className="codeToggle"
-                      title="Editar propriedades"
-                    >
-                      ⚙️
-                    </button>
-                    <button
-                      onClick={() => toggleCode(demo.id)}
-                      className="codeToggle"
-                      title="Ver código"
-                    >
-                      {showCode[demo.id] ? "👁️" : "💻"}
-                    </button>
-                  </div>
+        <section className="settingsSection">
+          <div className="sectionContent">
+            <h2 className="sectionTitle"><FaCog size={22} style={{ marginRight: '0.75rem' }} /> Configurações Globais</h2>
+            <div className="settingsGrid">
+              <div className="settingGroup">
+                <span className="settingLabel">Tema do Popup</span>
+                <div className="buttonGroup">
+                  <button
+                    onClick={() => changeTheme("dark")}
+                    className={`settingBtn ${currentTheme === "dark" ? "active" : ""}`}
+                  >
+                    <FaMoon size={14} style={{ marginRight: '0.4rem' }} /> Dark
+                  </button>
+                  <button
+                    onClick={() => changeTheme("white")}
+                    className={`settingBtn ${currentTheme === "white" ? "active" : ""}`}
+                  >
+                    <FaSun size={14} style={{ marginRight: '0.4rem' }} /> Light
+                  </button>
                 </div>
+              </div>
+              <div className="settingGroup">
+                <span className="settingLabel">Idioma</span>
+                <div className="buttonGroup">
+                  <button
+                    onClick={() => changeLang("ptbr")}
+                    className={`settingBtn ${currentLang === "ptbr" ? "active" : ""}`}
+                  >
+                    <FaGlobe size={14} style={{ marginRight: '0.4rem' }} /> PT-BR
+                  </button>
+                  <button
+                    onClick={() => changeLang("en")}
+                    className={`settingBtn ${currentLang === "en" ? "active" : ""}`}
+                  >
+                    <FaGlobe size={14} style={{ marginRight: '0.4rem' }} /> EN
+                  </button>
+                </div>
+                <span style={{ color: "gray" }}>O idioma atualiza os textos padrões, erros e textos nativos dos popuops</span>
+              </div>
+            </div>
+            <CodeBlock code={`"use client";
+import { NtPopupProvider } from "ntpopups";
+import "ntpopups/dist/styles.css"
 
-                {expandedProps[demo.id] && (
-                  <div className="propsEditor">
-                    <h4 className="propsTitle">Propriedades (data)</h4>
-                    {
-                      demo.type === "form" && <div className="formwarn"><span>Veja o editor completo de componentes de formulário logo abaixo nessa página</span></div>
+export default function PopupContext({ children }) {
+
+  return (
+    <NtPopupProvider language={"${currentLang}"} theme={"${currentTheme}"}>
+        {children}
+    </NtPopupProvider>
+    )
+}`} />
+          </div>
+        </section>
+
+        <section className="mainSection">
+          <div className="sectionContent">
+            <h2 className="sectionTitle">🎯 Tipos de Popup</h2>
+            <p className="sectionDescription">
+              Explore e edite os diferentes tipos de popups pré-definidos.
+            </p>
+            <div className="demoGrid">
+              {demos.map(demo => (
+                <div key={demo.id} className="demoCard">
+                  <div className="demoHeader">
+                    <div>
+                      <h3 className="demoTitle">{demo.title}</h3>
+                      <p className="demoDescription">{demo.description}</p>
+                    </div>
+                    <div style={{ display: "flex", gap: "0.5rem" }}>
+                      <button
+                        onClick={() => toggleProps(demo.id)}
+                        className="codeToggle"
+                        title="Editar propriedades"
+                      >
+                        <FaCog size={16} />
+                      </button>
+                      <button
+                        onClick={() => {
+                          if (demo.codeInline) {
+                            toggleCode(demo.id)
+                          } else {
+                            openPopup("show_code", {
+                              maxWidth: "100dvw",
+                              data: {
+                                content: <>
+                                  <CodeBlock fullHeight={true} code={generateCode(demo.type)} />
+                                </>
+                              }
+                            })
+                          }
+                        }}
+                        className="codeToggle"
+                        title="Ver código"
+                      >
+                        {showCode[demo.id] ? <FaChevronUp size={16} /> : <FaCode />}
+                      </button>
+                    </div>
+                  </div>
+
+                  {expandedProps[demo.id] && (
+                    <div className="propsEditor">
+                      <h4 className="propsTitle">Propriedades (data)</h4>
+                      {
+                        demo.type === "form" && <div className="formwarn"><span>Veja o editor completo de componentes de formulário logo abaixo nessa página</span></div>
+                      }
+                      {demo.properties.map(prop => {
+                        return <div key={prop.key} className="propField">
+                          <label className="propLabel">{prop.label} <span style={{ color: "gray", fontSize: "0.8rem", textTransform: "none", fontWeight: "100" }}>(data.{prop.key})</span></label>
+                          {prop.type === "select" ? (
+                            <select
+                              value={popupProps[demo.type][prop.key]}
+                              onChange={(e) => updatePopupProp(demo.type, prop.key, e.target.value)}
+                              className="propInput"
+                              disabled={prop.disabled}
+                            >
+                              {prop.options.map(opt => (
+                                <option key={opt} value={opt}>{opt}</option>
+                              ))}
+                            </select>
+                          ) : prop.type === "number" ? (
+                            <input
+                              type="number"
+                              value={popupProps[demo.type][prop.key]}
+                              onChange={(e) => updatePopupProp(demo.type, prop.key, parseFloat(e.target.value))}
+                              className="propInput"
+                              disabled={prop.disabled}
+                            />
+                          ) : prop.type === "boolean" ? (
+                            <select
+                              value={popupProps[demo.type][prop.key] ? "true" : "false"}
+                              onChange={(e) => updatePopupProp(demo.type, prop.key, e.target.value === "true")}
+                              className="propInput"
+                              disabled={prop.disabled}
+                            >
+                              <option value="true">Sim</option>
+                              <option value="false">Não</option>
+                            </select>
+                          ) : prop.type === "array" ? (
+                            <textarea
+                              value={JSON.stringify(popupProps[demo.type][prop.key], null, 2)}
+                              onChange={(e) => {
+                                try {
+                                  const parsed = JSON.parse(e.target.value);
+                                  updatePopupProp(demo.type, prop.key, parsed);
+                                } catch (err) {
+                                  // Permite edição mesmo com JSON inválido
+                                }
+                              }}
+                              className="propInput"
+                              rows={3}
+                              disabled={prop.disabled}
+                              placeholder='["item1", "item2"]'
+                            />
+                          ) : prop.type === "object" ? (
+                            <textarea
+                              value={JSON.stringify(popupProps[demo.type][prop.key], null, 2)}
+                              onChange={(e) => {
+                                try {
+                                  const parsed = JSON.parse(e.target.value);
+                                  updatePopupProp(demo.type, prop.key, parsed);
+                                } catch (err) {
+                                  // Permite edição mesmo com JSON inválido
+                                }
+                              }}
+                              className="propInput"
+                              rows={4}
+                              disabled={prop.disabled}
+                              placeholder='{"key": "value"}'
+                            />
+                          ) : prop.type === "textarea" ? (
+                            <textarea
+                              value={popupProps[demo.type][prop.key]}
+                              onChange={(e) => updatePopupProp(demo.type, prop.key, e.target.value)}
+                              className="propInput"
+                              rows={2}
+                              disabled={prop.disabled}
+                            />
+                          ) : (
+                            <input
+                              type="text"
+                              disabled={prop.disabled || (prop.key === "aspectRatio" && popupProps.crop_image.format != "square")}
+                              value={(prop.key === "aspectRatio" && popupProps.crop_image.format != "square") ? "1:1" : popupProps[demo.type][prop.key]}
+                              onChange={(e) => updatePopupProp(demo.type, prop.key, e.target.value)}
+                              className="propInput"
+                            />
+                          )}
+                        </div>
+                      })}
+                    </div>
+                  )}
+
+                  {(showCode[demo.id]) && (
+                    <CodeBlock code={generateCode(demo.type)} />
+                  )}
+
+                  <button
+                    onClick={demo.action}
+                    className="demoBtn"
+                  >
+                    Abrir Popup
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="advancedSection">
+          <div className="sectionContent">
+            <h2 className="sectionTitle"><FaRocket size={22} style={{ marginRight: '0.75rem' }} /> Configurações Gerais</h2>
+            <p className="sectionDescription">
+              Propriedades disponíveis em todos os tipos de popup (Inclusive os criados por você!)
+            </p>
+            <div className="demoGrid">
+              {advancedDemos.map(demo => (
+                <div key={demo.id} className="demoCard">
+                  <div className="demoHeader">
+                    <div>
+                      <h3 className="demoTitle">{demo.title}</h3>
+                      <p className="demoDescription">{demo.description}</p>
+                    </div>
+                    <div style={{ display: "flex", gap: "0.5rem" }}>
+                      <button
+                        onClick={() => toggleAdvancedCode(demo.id)}
+                        className="codeToggle"
+                        title="Ver código"
+                      >
+                        {showAdvancedCode[demo.id] ? <FaChevronUp size={16} /> : <FaChevronDown size={16} />}
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Exibição do CodeBlock nas Configurações Avançadas */}
+                  {(showAdvancedCode[demo.id]) && (
+                    <CodeBlock code={demo.code} />
+                  )}
+
+                  <button
+                    onClick={demo.action}
+                    className="demoBtn"
+                  >
+                    Testar
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* // ---------------------------------------------------------------------
+      // --- NOVA SEÇÃO: FORM BUILDER ---
+      // ---------------------------------------------------------------------
+      */}
+        <section className="formBuilderSection">
+          <div className="sectionContent">
+            <h2 className="sectionTitle"><FaMagic size={22} style={{ marginRight: '0.75rem' }} /> Editor de Formulário Dinâmico</h2>
+            <p className="sectionDescription">
+              Crie, configure e teste popups de formulário complexos em tempo real.
+            </p>
+
+            {/* Ações */}
+            <div className="formBuilderActions">
+              <button
+                onClick={handleOpenFormPopup}
+                className="demoBtn"
+                style={{
+                  maxWidth: "200px"
+                }}
+              >
+                <FaRocket size={16} style={{ marginRight: '0.4rem' }} /> Testar Formulário
+              </button>
+              <button
+                onClick={() => setShowFormBuilderCode(p => !p)}
+                className={`settingBtn ${showFormBuilderCode ? 'active' : ''}`}
+                style={{ flex: '0 1 auto', padding: '0.75rem 1.5rem', minWidth: '150px' }}
+              >
+                {showFormBuilderCode ? "Esconder" : "Ver"} Código
+              </button>
+            </div>
+            {/* Toolbar de Propriedades Principais */}
+            <div className="propsEditor mainPropsEditor">
+              <h4 className="propsTitle">Propriedades Principais (data)</h4>
+              <div className="propGrid threeCols">
+                <div className="propField">
+                  <label className="propLabel">Title</label>
+                  <input type="text" value={popupProps.form.title} onChange={(e) => updatePopupProp('form', 'title', e.target.value)} className="propInput" />
+                </div>
+                <div className="propField">
+                  <label className="propLabel">Icon</label>
+                  <input type="text" value={popupProps.form.icon} onChange={(e) => updatePopupProp('form', 'icon', e.target.value)} className="propInput" />
+                </div>
+                <div className="propField">
+                  <label className="propLabel">Done Label</label>
+                  <input type="text" value={popupProps.form.doneLabel} onChange={(e) => updatePopupProp('form', 'doneLabel', e.target.value)} className="propInput" />
+                </div>
+              </div>
+              <div className="propField">
+                <label className="propLabel">Message</label>
+                <textarea value={popupProps.form.message} onChange={(e) => updatePopupProp('form', 'message', e.target.value)} className="propInput" rows={2} />
+              </div>
+            </div>
+
+            {/* Main Editor Layout (2 colunas) */}
+            <div className="formBuilderEditor">
+
+              {/* Coluna 1: Lista de Componentes */}
+              <div className="componentListPanel">
+                <h4 className="componentListTitle">Componentes do Formulário</h4>
+                <div className="componentList">
+                  {formComponents.map((component, index) => {
+                    const isSelected = selectedComponentPath && selectedComponentPath[0] === index && selectedComponentPath.length === 1;
+
+                    // Renderiza Grupo Inline
+                    if (Array.isArray(component)) {
+                      return (
+                        <div key={index} className="inlineGroup">
+                          <div className="inlineGroupHeader">
+                            <span>#{index + 1} - Grupo Inline</span>
+                            <button onClick={() => handleDeleteComponent([index])} className="deleteBtn" title="Remover Grupo"><FaTrashAlt /></button>
+                          </div>
+                          <div className="inlineGroupContent">
+                            {component.map((inlineComp, inlineIndex) => {
+                              const isInlineSelected = selectedComponentPath && selectedComponentPath[0] === index && selectedComponentPath[1] === inlineIndex;
+                              return (
+                                <div
+                                  key={inlineIndex}
+                                  className={`componentItem inline ${isInlineSelected ? 'active' : ''}`}
+                                  onClick={() => handleSelectComponent([index, inlineIndex])}
+                                >
+                                  <span>{inlineComp.label || inlineComp.id} <small>({inlineComp.id}) [{inlineComp.type}]</small></span>
+                                  <button onClick={(e) => { e.stopPropagation(); handleDeleteComponent([index, inlineIndex]); }} className="deleteBtn" title="Remover Item"><FaTimes /></button>
+                                </div>
+                              );
+                            })}
+                            <button className="addBtn" onClick={() => handleAddComponent(newComponentType, index)}>+ Adicionar Item ao Grupo</button>
+                          </div>
+                        </div>
+                      );
                     }
-                    {demo.properties.map(prop => {
-                      return <div key={prop.key} className="propField">
-                        <label className="propLabel">{prop.label} <span style={{ color: "gray", fontSize: "0.8rem", textTransform: "none", fontWeight: "100" }}>(data.{prop.key})</span></label>
-                        {prop.type === "select" ? (
-                          <select
-                            value={popupProps[demo.type][prop.key]}
-                            onChange={(e) => updatePopupProp(demo.type, prop.key, e.target.value)}
-                            className="propInput"
-                          >
-                            {prop.options.map(opt => (
-                              <option key={opt} value={opt}>{opt}</option>
-                            ))}
-                          </select>
-                        ) : prop.type === "number" ? (
-                          <input
-                            type="number"
-                            value={popupProps[demo.type][prop.key]}
-                            onChange={(e) => updatePopupProp(demo.type, prop.key, parseFloat(e.target.value))}
-                            className="propInput"
-                          />
-                        ) : prop.type === "textarea" ? (
-                          <textarea
-                            value={popupProps[demo.type][prop.key]}
-                            onChange={(e) => updatePopupProp(demo.type, prop.key, e.target.value)}
-                            className="propInput"
-                            rows={2}
-                          />
-                        ) : (
-                          <input
-                            type="text"
-                            disabled={prop.disabled || (prop.key === "aspectRatio" && popupProps.crop_image.format != "square")}
-                            value={(prop.key === "aspectRatio" && popupProps.crop_image.format != "square") ? "1:1" : popupProps[demo.type][prop.key]}
-                            onChange={(e) => updatePopupProp(demo.type, prop.key, e.target.value)}
-                            className="propInput"
-                          />
-                        )}
-                      </div>
-                    })}
-                  </div>
-                )}
 
-                {(showCode[demo.id]) && (
-                  <CodeBlock code={generateCode(demo.type)} />
-                )}
-
-                <button
-                  onClick={demo.action}
-                  className="demoBtn"
-                >
-                  Abrir Popup
-                </button>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="advancedSection">
-        <div className="sectionContent">
-          <h2 className="sectionTitle">🚀 Configurações Gerais</h2>
-          <p className="sectionDescription">
-            Propriedades disponíveis em todos os tipos de popup!
-          </p>
-          <div className="demoGrid">
-            {advancedDemos.map(demo => (
-              <div key={demo.id} className="demoCard">
-                <div className="demoHeader">
-                  <div>
-                    <h3 className="demoTitle">{demo.title}</h3>
-                    <p className="demoDescription">{demo.description}</p>
-                  </div>
-                  <div style={{ display: "flex", gap: "0.5rem" }}>
-                    <button
-                      onClick={() => toggleAdvancedCode(demo.id)}
-                      className="codeToggle"
-                      title="Ver código"
-                    >
-                      {showAdvancedCode[demo.id] ? "👁️" : "💻"}
-                    </button>
-                  </div>
-                </div>
-
-                {/* Exibição do CodeBlock nas Configurações Avançadas */}
-                {(showAdvancedCode[demo.id]) && (
-                  <CodeBlock code={demo.code} />
-                )}
-
-                <button
-                  onClick={demo.action}
-                  className="demoBtn"
-                >
-                  Testar
-                </button>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* // ---------------------------------------------------------------------
-      // --- NOVA SEÇÃO: FORM BUILDER ---
-      // ---------------------------------------------------------------------
-      */}
-      <section className="formBuilderSection">
-        <div className="sectionContent">
-          <h2 className="sectionTitle">🛠️ Editor de Formulário Dinâmico</h2>
-          <p className="sectionDescription">
-            Crie, configure e teste popups de formulário complexos em tempo real.
-          </p>
-
-          {/* Ações */}
-          <div className="formBuilderActions">
-            <button
-              onClick={handleOpenFormPopup}
-              className="demoBtn"
-              style={{
-                maxWidth: "200px"
-              }}
-            >
-              🚀 Testar Formulário
-            </button>
-            <button
-              onClick={() => setShowFormBuilderCode(p => !p)}
-              className={`settingBtn ${showFormBuilderCode ? 'active' : ''}`}
-              style={{ flex: '0 1 auto', padding: '0.75rem 1.5rem' }}
-            >
-              {showFormBuilderCode ? "Esconder" : "Ver"} Código
-            </button>
-          </div>
-          {/* Toolbar de Propriedades Principais */}
-          <div className="propsEditor mainPropsEditor">
-            <h4 className="propsTitle">Propriedades Principais (data)</h4>
-            <div className="propGrid threeCols">
-              <div className="propField">
-                <label className="propLabel">Title</label>
-                <input type="text" value={popupProps.form.title} onChange={(e) => updatePopupProp('form', 'title', e.target.value)} className="propInput" />
-              </div>
-              <div className="propField">
-                <label className="propLabel">Icon</label>
-                <input type="text" value={popupProps.form.icon} onChange={(e) => updatePopupProp('form', 'icon', e.target.value)} className="propInput" />
-              </div>
-              <div className="propField">
-                <label className="propLabel">Done Label</label>
-                <input type="text" value={popupProps.form.doneLabel} onChange={(e) => updatePopupProp('form', 'doneLabel', e.target.value)} className="propInput" />
-              </div>
-            </div>
-            <div className="propField">
-              <label className="propLabel">Message</label>
-              <textarea value={popupProps.form.message} onChange={(e) => updatePopupProp('form', 'message', e.target.value)} className="propInput" rows={2} />
-            </div>
-          </div>
-
-          {/* Main Editor Layout (2 colunas) */}
-          <div className="formBuilderEditor">
-
-            {/* Coluna 1: Lista de Componentes */}
-            <div className="componentListPanel">
-              <h4 className="componentListTitle">Componentes do Formulário</h4>
-              <div className="componentList">
-                {formComponents.map((component, index) => {
-                  const isSelected = selectedComponentPath && selectedComponentPath[0] === index && selectedComponentPath.length === 1;
-
-                  // Renderiza Grupo Inline
-                  if (Array.isArray(component)) {
+                    // Renderiza Item Normal
                     return (
-                      <div key={index} className="inlineGroup">
-                        <div className="inlineGroupHeader">
-                          <span>#{index + 1} - Grupo Inline</span>
-                          <button onClick={() => handleDeleteComponent([index])} className="deleteBtn" title="Remover Grupo">🗑️</button>
-                        </div>
-                        <div className="inlineGroupContent">
-                          {component.map((inlineComp, inlineIndex) => {
-                            const isInlineSelected = selectedComponentPath && selectedComponentPath[0] === index && selectedComponentPath[1] === inlineIndex;
-                            return (
-                              <div
-                                key={inlineIndex}
-                                className={`componentItem inline ${isInlineSelected ? 'active' : ''}`}
-                                onClick={() => handleSelectComponent([index, inlineIndex])}
-                              >
-                                <span>{inlineComp.label || inlineComp.id} <small>({inlineComp.id}) [{inlineComp.type}]</small></span>
-                                <button onClick={(e) => { e.stopPropagation(); handleDeleteComponent([index, inlineIndex]); }} className="deleteBtn" title="Remover Item">❌</button>
-                              </div>
-                            );
-                          })}
-                          <button className="addBtn" onClick={() => handleAddComponent(newComponentType, index)}>+ Adicionar Item ao Grupo</button>
-                        </div>
+                      <div
+                        key={index}
+                        className={`componentItem ${isSelected ? 'active' : ''}`}
+                        onClick={() => handleSelectComponent([index])}
+                      >
+                        <span>{component.label || component.id} <small>({component.id}) [{component.type}]</small></span>
+                        <button onClick={(e) => { e.stopPropagation(); handleDeleteComponent([index]); }} className="deleteBtn" title="Remover Item"><FaTimes /></button>
                       </div>
                     );
-                  }
-
-                  // Renderiza Item Normal
-                  return (
-                    <div
-                      key={index}
-                      className={`componentItem ${isSelected ? 'active' : ''}`}
-                      onClick={() => handleSelectComponent([index])}
-                    >
-                      <span>{component.label || component.id} <small>({component.id}) [{component.type}]</small></span>
-                      <button onClick={(e) => { e.stopPropagation(); handleDeleteComponent([index]); }} className="deleteBtn" title="Remover Item">❌</button>
-                    </div>
-                  );
-                })}
+                  })}
+                </div>
+                <div className="addComponentToolbar">
+                  <select value={newComponentType} onChange={(e) => setNewComponentType(e.target.value)} className="propInput">
+                    {componentTypes.map(type => (
+                      <option key={type.value} value={type.value}>{type.label}</option>
+                    ))}
+                  </select>
+                  <button className="addBtn" onClick={() => handleAddComponent(newComponentType)}>+ Adicionar</button>
+                  <button className="addBtn secondary" onClick={handleAddInlineGroup}>+ Grupo Inline</button>
+                </div>
               </div>
-              <div className="addComponentToolbar">
-                <select value={newComponentType} onChange={(e) => setNewComponentType(e.target.value)} className="propInput">
-                  {componentTypes.map(type => (
-                    <option key={type.value} value={type.value}>{type.label}</option>
-                  ))}
-                </select>
-                <button className="addBtn" onClick={() => handleAddComponent(newComponentType)}>+ Adicionar</button>
-                <button className="addBtn secondary" onClick={handleAddInlineGroup}>+ Grupo Inline</button>
+
+              {/* Coluna 2: Editor de Propriedades */}
+              <div className="propertyEditorPanel">
+                {renderPropertyEditor()}
               </div>
-            </div>
 
-            {/* Coluna 2: Editor de Propriedades */}
-            <div className="propertyEditorPanel">
-              {renderPropertyEditor()}
             </div>
-
+            {/* Bloco de Código */}
+            {showFormBuilderCode && (
+              <CodeBlock code={generateFormBuilderCode()} />
+            )}
           </div>
-          {/* Bloco de Código */}
-          {showFormBuilderCode && (
-            <CodeBlock code={generateFormBuilderCode()} />
-          )}
-        </div>
-      </section>
+        </section>
 
-      <footer className="footer">
-        <p>Feito com ❤️ usando ntpopups</p>
-      </footer>
-    </div>
+        <footer className="footer">
+          <p>Feito com ❤️ usando ntpopups</p>
+        </footer>
+      </div>
+    </>
   );
 }

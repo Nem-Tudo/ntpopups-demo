@@ -74,3 +74,8 @@ html {
   scrollbar-color: #a7a7a7 #f1f1f1;
   /* cor_thumb cor_track */
 }
+
+.token.operator, .token.entity, .token.url, .language-css .token.string, .style .token.string{
+  background: transparent !important;
+  color: #56B6C2 !important;
+}
