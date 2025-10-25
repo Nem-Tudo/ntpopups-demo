@@ -195,7 +195,7 @@ export default function Home() {
       productName: "Produto Exemplo",
       productId: "prod_123",
       productPrice: 99.90,
-      productImage: "/demo/image03.png",
+      productImage: "https://cdn.nemtudo.me/f/nemtudo/MjAyNS8xMC8yNS9JTUFHRS8xOF80Nl8zNl9fMTc2MTQyODc5NjcwNC00MzE2MTAxMDY.webp",
       productDescription: "Descrição detalhada do produto com suas principais características e benefícios.",
       productStock: 10,
       allowQuantityChange: true,
@@ -363,13 +363,33 @@ export default function Home() {
 })`;
       case 'my_user_popup':
         return `
-// components/popups/MyUserPopup.jsx
+// components/popups/MyUserPopup.jsx ------
 
-${userPopupCode}`
+${userPopupCode}
+
+// PopupContext.jsx ------
+
+import MyUserPopup from "./components/popups/MyUserPopup.jsx"
+
+<NtPopupProvider customPopups={{ "my_user_popup": MyUserPopup }}>
+    {children}
+</NtPopupProvider>
+
+// Your open code ------
+
+openPopup("my_user_popup", {
+  data: {
+    userId: "${escapeString(props.userId)}",
+    userName: "${escapeString(props.userName)}",
+    userBio: "${escapeString(props.userBio)}",
+    onAddFriend: (id) => alert(\`Novo amigo: \${id}\`)
+  }
+});
+`
 
       case 'my_buy_popup':
         return `
-// components/popups/MyBuyPopup.jsx
+// ------ components/popups/MyBuyPopup.jsx ------
 
 ${buyPopupCode}`
       default:
@@ -819,7 +839,7 @@ ${buyPopupCode}`
             aspectRatio: props.format != "square" ? "1:1" : props.aspectRatio,
             minZoom: props.minZoom,
             maxZoom: props.maxZoom,
-            image: props.image,
+            image: props.image || "/demo/image01.png",
             onCrop: (data) => alert(data)
           }
         });
@@ -1218,6 +1238,7 @@ setTimeout(() => {
     },
     {
       id: "on-open",
+      codeInPopup: true,
       title: "Callback ao Abrir",
       description: "onOpen()",
       action: () => openPopup("generic", {
@@ -1237,6 +1258,7 @@ setTimeout(() => {
     {
       id: "on-close",
       title: "Callback ao Fechar",
+      codeInPopup: true,
       description: "onClose()",
       action: () => openPopup("confirm", {
         onClose: (hasAction, id) => alert(`Popup fechado! Teve ação (confirm/cancel): ${hasAction ? "Sim" : "Não"}`),
@@ -1255,13 +1277,14 @@ setTimeout(() => {
     {
       id: "update-popup",
       title: "Update dinâmico",
+      codeInPopup: true,
       description: "updatePopup() - Cronômetro",
       action: async () => {
         const popup = await openPopup("generic", {
           onClose: () => stopInterval(),
           data: {
             title: "Cronômetro",
-            icon: "clock", // string customizada
+            icon: "⏰", // string customizada
             message: "Iniciando...",
           }
         });
@@ -1281,29 +1304,33 @@ setTimeout(() => {
           clearInterval(interval);
         }
       },
-      code: `const popup = await openPopup("generic", {
-        onClose: () => stopInterval(),
-        data: {
-          title: "Cronômetro",
-          icon: "clock",
-          message: "Iniciando...",
-        }
-      });
+      code: `// Hook
+const { openPopup, updatePopup } = useNtPopups();
 
-      let count = 0;
-      const interval = setInterval(() => {
-        count++;
-        updatePopup(popup.id, {
-          data: {
-            ...popup.settings.data,
-            message: \`\${count}s\`,
-          }
-        });
-      }, 1000);
+// No seu handle
+const popup = await openPopup("generic", {
+  onClose: () => stopInterval(),
+  data: {
+    title: "Cronômetro",
+    icon: "⏰",
+    message: "Iniciando...",
+  }
+});
 
-      function stopInterval() { // Boa prática: Garanta que o interval seja limpo ao fechar
-        clearInterval(interval);
-      }`
+let count = 0;
+const interval = setInterval(() => {
+  count++;
+  updatePopup(popup.id, {
+    data: {
+      ...popup.settings.data,
+      message: \`\${count}s\`,
+    }
+  });
+}, 1000);
+
+function stopInterval() { // Boa prática: garanta que o interval seja limpo ao fechar
+  clearInterval(interval);
+}`
     }
   ];
 
@@ -1437,7 +1464,10 @@ export default function PopupContext({ children }) {
                     <div className="propsEditor">
                       <h4 className="propsTitle">Propriedades (data)</h4>
                       {
-                        demo.type === "form" && <div className="formwarn"><span>Veja o editor completo de componentes de formulário logo abaixo nessa página</span></div>
+                        demo.type === "form" && <div className="propwarn"><span>Veja o editor completo de componentes de formulário logo abaixo nessa página</span></div>
+                      }
+                      {
+                        demo.type.startsWith("my") && <div className="propwarn"><span>Aprenda tudo sobre popups customizados lendo a <a target="_blank" href="https://ntpopups.nemtudo.me/creating-custom-popups/">Documentação Oficial</a></span></div>
                       }
                       {demo.properties.map(prop => {
                         return <div key={prop.key} className="propField">
@@ -1557,11 +1587,24 @@ export default function PopupContext({ children }) {
                     </div>
                     <div style={{ display: "flex", gap: "0.5rem" }}>
                       <button
-                        onClick={() => toggleAdvancedCode(demo.id)}
+                        onClick={() => {
+                          if (demo.codeInPopup) {
+                            openPopup("show_code", {
+                              maxWidth: "100dvw",
+                              data: {
+                                content: <>
+                                  <CodeBlock code={demo.code} fullHeight={true} />
+                                </>
+                              }
+                            })
+                          } else {
+                            toggleAdvancedCode(demo.id)
+                          }
+                        }}
                         className="codeToggle"
                         title="Ver código"
                       >
-                        {showAdvancedCode[demo.id] ? <FaChevronUp size={16} /> : <FaChevronDown size={16} />}
+                        {showAdvancedCode[demo.id] ? <FaChevronUp size={16} /> : <FaCode size={16} />}
                       </button>
                     </div>
                   </div>
