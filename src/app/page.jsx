@@ -1600,7 +1600,7 @@ export default function PopupContext({ children }) {
           <div className="sectionContent">
             <h2 className="sectionTitle"><FaRocket size={22} style={{ marginRight: '0.75rem' }} /> Configurações Gerais</h2>
             <p className="sectionDescription">
-              Propriedades disponíveis em todos os tipos de popup (Inclusive os criados por você!)
+              Propriedades disponíveis automaticamente em todos os tipos de popup (Inclusive os criados por você!)
             </p>
             <div className="demoGrid">
               {advancedDemos.map(demo => (
