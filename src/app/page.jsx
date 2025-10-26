@@ -121,7 +121,7 @@ const processSingleComponent = (comp) => {
 
 
 export default function Home() {
-  const { openPopup, closePopup, updatePopup } = useNtPopups();
+  const { openPopup, updatePopup } = useNtPopups();
   const { updateSettings } = usePopupSettings();
 
   // 1. Estado para controlar a visualização do código em Tipos de Popup e Configurações Avançadas
@@ -152,7 +152,7 @@ export default function Home() {
     form: {
       title: "Formulário Dinâmico",
       message: "",
-      icon: "@",
+      icon: "📩",
       doneLabel: "Enviar",
       onSubmit: `(data) => alert(data)`,
       onChange: `(data) => console.log(data)`
@@ -166,24 +166,24 @@ export default function Home() {
       onCrop: `(data) => console.log(data)`
     },
     html: {
-      html: `<div style={{ color: "black", padding: "20px", textAlign: "center" }}>
-              <h2 style={{ marginBottom: "10px" }}>🎉 Olá!</h2>
-              <p>Este é um popup com HTML totalmente customizado</p>
-              <button
-                onClick={() => closePopup(true)}
-                style={{
-                  marginTop: "15px",
-                  padding: "8px 16px",
-                  background: "#6366f1",
-                  color: "white",
-                  border: "none",
-                  borderRadius: "6px",
-                  cursor: "pointer"
-                }}
-              >
-                Fechar
-              </button>
-            </div>`
+      html: `({ closePopup }) => <div style={{ color: "black", padding: "20px", textAlign: "center" }}>
+              <h2 style={{ marginBottom: "10px" }}>🎉 Olá!</h2>
+              <p>Este é um popup com HTML totalmente customizado</p>
+              <button
+                onClick={() => closePopup(true)}
+                style={{
+                  marginTop: "15px",
+                  padding: "8px 16px",
+                  background: "#6366f1",
+                  color: "white",
+                  border: "none",
+                  borderRadius: "6px",
+                  cursor: "pointer"
+                }}
+              >
+                Fechar
+              </button>
+            </div>`
     },
     my_user_popup: {
       userName: "João",
@@ -257,7 +257,6 @@ export default function Home() {
 
   // Caminho para o componente selecionado. Ex: [1] (segundo item) ou [3, 0] (primeiro item do quarto grupo)
   const [selectedComponentPath, setSelectedComponentPath] = useState(null);
-  const [showFormBuilderCode, setShowFormBuilderCode] = useState(false);
   const [newComponentType, setNewComponentType] = useState("text");
   // -----------------------------------------
 
@@ -303,79 +302,72 @@ export default function Home() {
     switch (type) {
       case 'generic':
         return `openPopup("generic", { 
-  data: { 
-    message: "${escapeString(props.message)}",
-    title: "${escapeString(props.title)}",
-    icon: "${escapeString(icon)}",
-    closeLabel: "${escapeString(props.closeLabel)}"
-  } 
+  data: { 
+    message: "${escapeString(props.message)}",
+    title: "${escapeString(props.title)}",
+    icon: "${escapeString(icon)}",
+    closeLabel: "${escapeString(props.closeLabel)}"
+  } 
 })`;
       case 'confirm':
         return `openPopup("confirm", { 
-  data: { 
-    message: "${escapeString(props.message)}",
-    title: "${escapeString(props.title)}",
-    icon: "${escapeString(icon)}",
-    cancelLabel: "${escapeString(props.cancelLabel)}",
-    confirmLabel: "${escapeString(props.confirmLabel)}",
-    confirmStyle: "${escapeString(props.confirmStyle)}",
-    onChoose: (choice) => alert(choice ? "Confirmado!" : "Cancelado")
-  } 
+  data: { 
+    message: "${escapeString(props.message)}",
+    title: "${escapeString(props.title)}",
+    icon: "${escapeString(icon)}",
+    cancelLabel: "${escapeString(props.cancelLabel)}",
+    confirmLabel: "${escapeString(props.confirmLabel)}",
+    confirmStyle: "${escapeString(props.confirmStyle)}",
+    onChoose: (choice) => alert(choice ? "Confirmado!" : "Cancelado")
+  } 
 })`;
       case 'form': // Este é o código do demo simples, não o builder
         return `openPopup("form", { 
-  data: { 
-    title: "${escapeString(props.title)}",
-    message: "${escapeString(props.message)}",
-    icon: "${escapeString(icon)}",
-    doneLabel: "${escapeString(props.doneLabel)}",
-    components: [
-      { id: "name", type: "text", label: "Nome", placeholder: "Seu nome", required: true },
-      { id: "email", type: "email", label: "E-mail", placeholder: "seu@email.com", required: false },
-    ],
-    onSubmit: (data) => alert(data),
-    onChange: (data) => console.log(data),
-  } 
+  data: { 
+    title: "${escapeString(props.title)}",
+    message: "${escapeString(props.message)}",
+    icon: "${escapeString(icon)}",
+    doneLabel: "${escapeString(props.doneLabel)}",
+    components: [
+      { id: "name", type: "text", label: "Nome", placeholder: "Seu nome", required: true },
+      { id: "email", type: "email", label: "E-mail", placeholder: "seu@email.com", required: false },
+    ],
+    onSubmit: (data) => alert(data),
+    onChange: (data) => console.log(data),
+  } 
 })`;
       case 'crop_image':
         return `openPopup("crop_image", { 
-  data: { 
-    image: "${escapeString(props.image || "/demo/image01.png")}",
-    format: "${escapeString(props.format)}",
-    aspectRatio: "${(popupProps.crop_image.format != "square") ? "1:1" : escapeString(props.aspectRatio)}",
-    minZoom: ${props.minZoom},
-    maxZoom: ${props.maxZoom},
-    onCrop: (data) => console.log(data)
-  } 
+  data: { 
+    image: "${escapeString(props.image || "/demo/image01.png")}",
+    format: "${escapeString(props.format)}",
+    aspectRatio: "${(popupProps.crop_image.format != "square") ? "1:1" : escapeString(props.aspectRatio)}",
+    minZoom: ${props.minZoom},
+    maxZoom: ${props.maxZoom},
+    onCrop: (data) => console.log(data)
+  } 
 })`;
       case 'html':
         return `openPopup("html", { 
-  data: { 
-    html: (
-      <div style={{ color: "black", padding: "20px", textAlign: "center" }}>
-        <h2 style={{ marginBottom: "10px" }}>🎉 Olá!</h2>
-        <p>Este é um popup com HTML totalmente customizado</p>
-        {/* Você deve usar closePopup(true) se a ação fechar o popup */}
-        <button onClick={() => closePopup(true)}>Fechar</button>
-      </div>
-    )
-  } 
+  data: { 
+    html: ({ closePopup }) => <div style={{ color: "black", padding: "20px", textAlign: "center" }}>
+      <h2 style={{ marginBottom: "10px" }}>🎉 Olá!</h2>
+      <p>Este é um popup com HTML totalmente customizado</p>
+      {/* Você deve usar closePopup(true) se for uma ação de conclusão */}
+      <button onClick={() => closePopup(true)}>Fechar</button>
+    </div>
+  } 
 })`;
       case 'my_user_popup':
-        return `
-// components/popups/MyUserPopup.jsx ------
+        return [`// components/popups/MyUserPopup.jsx
 
-${userPopupCode}
-
-// PopupContext.jsx ------
+${userPopupCode}`, `// PopupContext.jsx
 
 import MyUserPopup from "./components/popups/MyUserPopup.jsx"
 
 <NtPopupProvider customPopups={{ "my_user_popup": MyUserPopup }}>
     {children}
-</NtPopupProvider>
-
-// Your open code ------
+</NtPopupProvider>`, `// Your open code
 
 openPopup("my_user_popup", {
   data: {
@@ -385,13 +377,45 @@ openPopup("my_user_popup", {
     onAddFriend: (id) => alert(\`Novo amigo: \${id}\`)
   }
 });
-`
+`]
 
       case 'my_buy_popup':
-        return `
-// ------ components/popups/MyBuyPopup.jsx ------
+        return [`// components/popups/MyBuyPopup.jsx
 
-${buyPopupCode}`
+${buyPopupCode}`, `// PopupContext.jsx
+
+import MyBuyPopup from "./components/popups/MyBuyPopup.jsx"
+
+<NtPopupProvider customPopups={{ "my_buy_popup": MyBuyPopup }}>
+    {children}
+</NtPopupProvider>`, `// Your open code
+
+openPopup("my_buy_popup", {
+  data: {
+    productName: "${escapeString(props.productName)}",
+    productId: "${escapeString(props.productId)}",
+    productPrice: ${props.productPrice},
+    productImage: "${escapeString(props.productImage)}",
+    productDescription: "${escapeString(props.productDescription)}",
+    productStock: ${props.productStock},
+    allowQuantityChange: ${props.allowQuantityChange},
+    showShipping: ${props.showShipping},
+    shippingPrice: ${props.shippingPrice},
+    freeShippingThreshold: ${props.freeShippingThreshold},
+    acceptedPaymentMethods: ${JSON.stringify(props.acceptedPaymentMethods)},
+    allowCoupon: ${props.allowCoupon},
+    getCoupon: async (code) => {
+      await new Promise(resolve => setTimeout(resolve, 500));
+
+      const coupons = {
+  "PERC10": { discount: 10, type: "percent" },
+  "FIX20": { discount: 20, type: "fixed" }
+      };
+      return coupons[code];
+    },
+    onBuy: (purchase) => alert(JSON.stringify(purchase))
+  }
+});`]
       default:
         return '';
     }
@@ -529,27 +553,27 @@ ${buyPopupCode}`
       return value;
     };
 
-    let componentsString = JSON.stringify(formComponents, replacer, 2);
+    let componentsString = JSON.stringify(formComponents, replacer, 5);
 
     // Pós-processamento para remover aspas de `new Date(...)`
     componentsString = componentsString.replace(/"new Date\('([^']*)'\)"/g, "new Date('$1')");
 
     return `openPopup("form", {
-  data: {
-    title: "${escapeString(props.title)}",
-    message: "${escapeString(props.message)}",
-    icon: "${escapeString(icon)}",
-    doneLabel: "${escapeString(props.doneLabel)}",
-    components: ${componentsString},
-    onSubmit: (data) => {
-      console.log('Form data:', data);
-      alert('Dados enviados: ' + JSON.stringify(data));
-    },
-    onChange: ({ changedComponentState, formState }) => {
-      console.log('Changed component:', changedComponentState.id);
-      console.log('Current form values:', formState.values);
-    }
-  }
+  data: {
+    title: "${escapeString(props.title)}",
+    message: "${escapeString(props.message)}",
+    icon: "${escapeString(icon)}",
+    doneLabel: "${escapeString(props.doneLabel)}",
+    onSubmit: (data) => {
+      console.log('Form data:', data);
+      alert('Dados enviados: ' + JSON.stringify(data));
+    },
+    onChange: ({ changedComponentState, formState }) => {
+      console.log('Changed component:', changedComponentState.id);
+      console.log('Current form values:', formState.values);
+    },
+    components: ${componentsString}
+}
 });`;
   };
 
@@ -709,7 +733,7 @@ ${buyPopupCode}`
               onChange={(e) => handlePropChange(path, 'options', e, 'json')}
               className="propInput"
               rows={4}
-              placeholder={`Ex: ["Opção 1", "Opção 2"]\n\nOu:\n\n[\n  {"label": "Opção A", "value": "a"},\n  {"label": "Opção B", "value": "b"}\n]`}
+              placeholder={`Ex: ["Opção 1", "Opção 2"]\n\nOu:\n\n[\n  {"label": "Opção A", "value": "a"},\n  {"label": "Opção B", "value": "b"}\n]`}
             />
           </div>
         )}
@@ -861,7 +885,7 @@ ${buyPopupCode}`
       action: () => {
         openPopup("html", {
           data: {
-            html: (
+            html: ({ closePopup }) => (
               <div style={{ color: "black", padding: "20px", textAlign: "center" }}>
                 <h2 style={{ marginBottom: "10px" }}>🎉 Olá!</h2>
                 <p>Este é um popup com HTML totalmente customizado</p>
@@ -885,7 +909,7 @@ ${buyPopupCode}`
         });
       },
       properties: [
-        { disabled: true, key: "html", label: "HTML", type: "text" }
+        { disabled: true, key: "html", label: "HTML", type: "textarea" }
       ]
     },
     {
@@ -977,11 +1001,11 @@ ${buyPopupCode}`
         }
       }),
       code: `openPopup("confirm", { 
-  closeOnEscape: false,
-  data: { 
-    message: "Não é possível fechar com ESC",
-    title: "Popup bloqueado"
-  } 
+  closeOnEscape: false,
+  data: { 
+    message: "Não é possível fechar com ESC",
+    title: "Popup bloqueado"
+  } 
 })`
     },
     {
@@ -995,10 +1019,10 @@ ${buyPopupCode}`
         }
       }),
       code: `openPopup("confirm", { 
-  closeOnClickOutside: false,
-  data: { 
-    message: "Você não pode fechar este popup clicando fora dele",
-  } 
+  closeOnClickOutside: false,
+  data: { 
+    message: "Você não pode fechar este popup clicando fora dele",
+  } 
 })`
     },
     {
@@ -1014,11 +1038,11 @@ ${buyPopupCode}`
         }
       }),
       code: `openPopup("generic", { 
-  timeout: 5000,
-  data: { 
-    message: "Fecha em 5 segundos",
-    icon: "clock"
-  } 
+  timeout: 5000,
+  data: { 
+    message: "Fecha em 5 segundos",
+    icon: "clock"
+  } 
 })`
     },
     {
@@ -1035,10 +1059,10 @@ ${buyPopupCode}`
         }
       }),
       code: `openPopup("confirm", { 
-  requireAction: true,
-  data: { 
-    message: "Você deve escolher uma opção"
-  } 
+  requireAction: true,
+  data: { 
+    message: "Você deve escolher uma opção"
+  } 
 })`
     },
     {
@@ -1056,14 +1080,14 @@ ${buyPopupCode}`
         }, 3000);
       },
       code: `openPopup("generic", { 
-  data: { message: "Popup 1" } 
+  data: { message: "Popup 1" } 
 });
 
 setTimeout(() => {
-  openPopup("generic", { 
-    keepLast: false,
-    data: { title: "Popup 2" } 
-  });
+  openPopup("generic", { 
+    keepLast: false,
+    data: { title: "Popup 2" } 
+  });
 }, 3000);`
     },
     {
@@ -1081,14 +1105,14 @@ setTimeout(() => {
         }, 3000);
       },
       code: `openPopup("generic", { 
-  data: { message: "Popup 1" } 
+  data: { message: "Popup 1" } 
 });
 
 setTimeout(() => {
-  openPopup("generic", { 
-    keepLast: true,
-    data: { title: "Popup 2" } 
-  });
+  openPopup("generic", { 
+    keepLast: true,
+    data: { title: "Popup 2" } 
+  });
 }, 3000);`
     },
     {
@@ -1103,10 +1127,10 @@ setTimeout(() => {
         }
       }),
       code: `openPopup("generic", {
-  allowPageBodyScroll: true,
-  data: {
-    message: "Scroll habilitado"
-  }
+  allowPageBodyScroll: true,
+  data: {
+    message: "Scroll habilitado"
+  }
 })`
     },
     {
@@ -1121,10 +1145,10 @@ setTimeout(() => {
         }
       }),
       code: `openPopup("generic", { 
-  interactiveBackdrop: true,
-  data: { 
-    message: "Fundo interativo"
-  } 
+  interactiveBackdrop: true,
+  data: { 
+    message: "Fundo interativo"
+  } 
 })`
     },
     {
@@ -1139,10 +1163,10 @@ setTimeout(() => {
         }
       }),
       code: `openPopup("generic", { 
-  hiddenBackdrop: true,
-  data: { 
-    message: "Sem fundo escuro"
-  } 
+  hiddenBackdrop: true,
+  data: { 
+    message: "Sem fundo escuro"
+  } 
 })`
     },
     {
@@ -1157,10 +1181,10 @@ setTimeout(() => {
         }
       }),
       code: `openPopup("generic", { 
-  hiddenFooter: true,
-  data: { 
-    message: "Sem rodapé"
-  } 
+  hiddenFooter: true,
+  data: { 
+    message: "Sem rodapé"
+  } 
 })`
     },
     {
@@ -1175,10 +1199,10 @@ setTimeout(() => {
         }
       }),
       code: `openPopup("generic", { 
-  hiddenHeader: true,
-  data: { 
-    message: "Sem cabeçalho"
-  } 
+  hiddenHeader: true,
+  data: { 
+    message: "Sem cabeçalho"
+  } 
 })`
     },
     {
@@ -1193,10 +1217,10 @@ setTimeout(() => {
         }
       }),
       code: `openPopup("generic", { 
-  disableOpenAnimation: true,
-  data: { 
-    message: "Sem animação de abertura"
-  } 
+  disableOpenAnimation: true,
+  data: { 
+    message: "Sem animação de abertura"
+  } 
 })`
     },
     {
@@ -1211,10 +1235,10 @@ setTimeout(() => {
         }
       }),
       code: `openPopup("generic", { 
-  maxWidth: "400px",
-  data: { 
-    message: "Máx. 400px"
-  } 
+  maxWidth: "400px",
+  data: { 
+    message: "Máx. 400px"
+  } 
 })`
     },
     {
@@ -1229,11 +1253,11 @@ setTimeout(() => {
         }
       }),
       code: `openPopup("generic", { 
-  minWidth: "100px",
-  data: { 
-    title: "Min",
-    message: "100px"
-  } 
+  minWidth: "100px",
+  data: { 
+    title: "Min",
+    message: "100px"
+  } 
 })`
     },
     {
@@ -1249,10 +1273,10 @@ setTimeout(() => {
         }
       }),
       code: `openPopup("generic", { 
-  onOpen: (popup) => alert(\`Popup aberto! ID: \${popup.id}\`),
-  data: { 
-    message: "Callback onOpen() executado"
-  } 
+  onOpen: (popup) => alert(\`Popup aberto! ID: \${popup.id}\`),
+  data: { 
+    message: "Callback onOpen() executado"
+  } 
 })`
     },
     {
@@ -1268,10 +1292,10 @@ setTimeout(() => {
         }
       }),
       code: `openPopup("confirm", { 
-  onClose: (hasAction, id) => alert(\`Popup fechado! Teve ação (confirm/cancel): \${hasAction ? "Sim" : "Não"}\`),
-  data: { 
-    title: "Callback de Fechamento"
-  } 
+  onClose: (hasAction, id) => alert(\`Popup fechado! Teve ação (confirm/cancel): \${hasAction ? "Sim" : "Não"}\`),
+  data: { 
+    title: "Callback de Fechamento"
+  } 
 })`
     },
     {
@@ -1307,7 +1331,7 @@ setTimeout(() => {
       code: `// Hook
 const { openPopup, updatePopup } = useNtPopups();
 
-// No seu handle
+// Your open code
 const popup = await openPopup("generic", {
   onClose: () => stopInterval(),
   data: {
@@ -1336,9 +1360,6 @@ function stopInterval() { // Boa prática: garanta que o interval seja limpo ao 
 
   return (
     <>
-      <Head>
-        <title>NtPopups Demo</title>
-      </Head>
       <div className="container">
         <header className="header">
           <div className="headerContent">
@@ -1442,11 +1463,15 @@ export default function PopupContext({ children }) {
                           if (demo.codeInline) {
                             toggleCode(demo.id)
                           } else {
+                            const code = generateCode(demo.type);
+                            const finalCodeArray = Array.isArray(code) ? code : [code];
                             openPopup("show_code", {
                               maxWidth: "100dvw",
                               data: {
                                 content: <>
-                                  <CodeBlock fullHeight={true} code={generateCode(demo.type)} />
+                                  {
+                                    finalCodeArray.map((code, index) => <CodeBlock key={index} fullHeight={true} code={code} />)
+                                  }
                                 </>
                               }
                             })
@@ -1627,9 +1652,9 @@ export default function PopupContext({ children }) {
         </section>
 
         {/* // ---------------------------------------------------------------------
-      // --- NOVA SEÇÃO: FORM BUILDER ---
-      // ---------------------------------------------------------------------
-      */}
+      // --- NOVA SEÇÃO: FORM BUILDER ---
+      // ---------------------------------------------------------------------
+      */}
         <section className="formBuilderSection">
           <div className="sectionContent">
             <h2 className="sectionTitle"><FaMagic size={22} style={{ marginRight: '0.75rem' }} /> Editor de Formulário Dinâmico</h2>
@@ -1649,11 +1674,19 @@ export default function PopupContext({ children }) {
                 <FaRocket size={16} style={{ marginRight: '0.4rem' }} /> Testar Formulário
               </button>
               <button
-                onClick={() => setShowFormBuilderCode(p => !p)}
-                className={`settingBtn ${showFormBuilderCode ? 'active' : ''}`}
+                onClick={() => {
+                  openPopup("show_code", {
+                    data: {
+                      content: <>
+                        <CodeBlock fullHeight={true} code={generateFormBuilderCode()} />
+                      </>
+                    }
+                  })
+                }}
+                className={`settingBtn`}
                 style={{ flex: '0 1 auto', padding: '0.75rem 1.5rem', minWidth: '150px' }}
               >
-                {showFormBuilderCode ? "Esconder" : "Ver"} Código
+                Ver Código
               </button>
             </div>
             {/* Toolbar de Propriedades Principais */}
@@ -1747,10 +1780,6 @@ export default function PopupContext({ children }) {
               </div>
 
             </div>
-            {/* Bloco de Código */}
-            {showFormBuilderCode && (
-              <CodeBlock code={generateFormBuilderCode()} />
-            )}
           </div>
         </section>
 

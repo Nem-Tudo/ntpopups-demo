@@ -13,12 +13,12 @@
     margin-bottom: 20px;
 }
 
-.propwarn a{
+.propwarn a {
     font-weight: 500;
     color: #4f46e5;
 }
 
-.propwarn a:hover{
+.propwarn a:hover {
     text-decoration: underline;
 }
 
@@ -641,6 +641,11 @@ textarea.propInput {
     border-radius: 8px;
     overflow: auto;
     position: relative;
+    cursor: text;
+}
+
+.codeBlockContainer textarea {
+    outline: none !important;
 }
 
 .copyButton {

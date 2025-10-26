@@ -422,6 +422,7 @@ export default function MyBuyPopup({
                             <div style={{ display: 'flex', gap: '8px', marginBottom: '8px' }}>
                                 <input
                                     type="text"
+                                    ntpopups-css="true"
                                     placeholder="Digite o cupom"
                                     value={couponCode}
                                     autoFocus="true"
