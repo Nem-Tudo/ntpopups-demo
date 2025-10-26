@@ -1208,16 +1208,16 @@ setTimeout(() => {
     {
       id: "no-animation",
       title: "Sem animação de abertura",
-      description: "disableOpenAnimation: true",
+      description: "disableAnimation: true",
       action: () => openPopup("generic", {
-        disableOpenAnimation: true,
+        disableAnimation: true,
         data: {
           message: "O popup abre instantaneamente, sem a animação padrão.",
           title: "Sem Animação"
         }
       }),
       code: `openPopup("generic", { 
-  disableOpenAnimation: true,
+  disableAnimation: true,
   data: { 
     message: "Sem animação de abertura"
   } 
