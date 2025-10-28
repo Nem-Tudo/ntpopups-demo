@@ -1,11 +1,12 @@
 "use client";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import useNtPopups from "ntpopups";
 import { usePopupSettings } from "../../contexts/PopupSettingsContext";
 
 // Importações do React Icons
-import { FaCopy, FaCheck, FaInfoCircle, FaQuestionCircle, FaEnvelope, FaCrop, FaHtml5, FaCog, FaMoon, FaSun, FaGlobe, FaChevronDown, FaChevronUp, FaTimes, FaTrashAlt, FaMagic, FaRocket, FaClock, FaBookOpen } from 'react-icons/fa';
+import { FaCopy, FaCheck, FaInfoCircle, FaQuestionCircle, FaEnvelope, FaCrop, FaHtml5, FaCog, FaMoon, FaSun, FaGlobe, FaChevronDown, FaChevronUp, FaTimes, FaTrashAlt, FaMagic, FaRocket, FaClock, FaBookOpen, FaBell, FaShoppingCart, FaUserCircle, FaExclamationTriangle, FaWrench, FaTags, FaLock, FaCalendarAlt, FaAddressCard, FaFileAlt, FaUserPlus, FaRegCreditCard, FaSitemap, FaKey, FaHourglassHalf, FaTimesCircle, FaChartPie, FaStar, FaPalette, FaMoneyBillWave } from 'react-icons/fa';
 import { FaCode } from "react-icons/fa";
+import { SiStagetimer } from "react-icons/si";
 
 // Importações da biblioteca react-simple-code-editor e Prism.js
 import Editor from "react-simple-code-editor";
@@ -15,13 +16,12 @@ import Prism from "prismjs";
 import "prismjs/components/prism-clike";
 import "prismjs/components/prism-javascript";
 import "prismjs/themes/prism.css"; // Estilo claro padrão do Prism.js
-import Head from "next/head";
 
 
 import userPopupCode from "../../components/popups/MyUserPopup.txt"
 import buyPopupCode from "../../components/popups/MyBuyPopup.txt"
 
-// Função utilitária para escapar strings (mantida do código original)
+// Função utilitária para escapar strings
 function escapeString(str) {
   // Escapa aspas duplas, mas não as strings de template literais (backticks)
   return String(str || "").replace(/"/g, '\\"').replace(/`/g, '\\`');
@@ -121,7 +121,7 @@ const processSingleComponent = (comp) => {
 
 
 export default function Home() {
-  const { openPopup, updatePopup } = useNtPopups();
+  const { openPopup, updatePopup, popups } = useNtPopups();
   const { updateSettings } = usePopupSettings();
 
   // 1. Estado para controlar a visualização do código em Tipos de Popup e Configurações Avançadas
@@ -205,16 +205,27 @@ export default function Home() {
       acceptedPaymentMethods: ["Cartão de Crédito", "PIX"],
       allowCoupon: true,
       getCoupon: `async (code) => {
-  // Simulating your API delay
-  await new Promise(resolve => setTimeout(resolve, 500));
+        // simulate your api latency
+        await new Promise(resolve => setTimeout(resolve, 500));
 
-  const coupons = {
-    "PERC10": { discount: 10, type: "percent" },
-    "FIX20": { discount: 20, type: "fixed" }
-  };
+        // coupon list
+        const coupons = {
+          "PERC10": { discount: 10, type: "percent" },
+          "FIX20": { discount: 20, type: "fixed" }
+        };
 
-  return coupons[code];
-},`,
+        // get current coupon object
+        const coupon = coupons[code];
+
+        // if the coupon is valid
+        if (coupon) {
+          // if is, returns the coupon object
+          return { coupon: coupon }
+        } else {
+          // if not, returns error: true and errorMessage
+          return { error: true, errorMessage: "Cupom inválido" }
+        }
+        }`,
       onBuy: "(purchase) => alert(JSON.stringify(purchase))"
     }
   });
@@ -404,18 +415,7 @@ openPopup("my_buy_popup", {
     freeShippingThreshold: ${props.freeShippingThreshold},
     acceptedPaymentMethods: ${JSON.stringify(props.acceptedPaymentMethods)},
     allowCoupon: ${props.allowCoupon},
-    getCoupon: async (code) => {
-      await new Promise(resolve => setTimeout(resolve, 500));
-
-      const coupons = {
-  "PERC10": { discount: 10, type: "percent" },
-  "FIX20": { discount: 20, type: "fixed" }
-      };
-      return coupons[code];
-    },
-    onBuy: (purchase) => alert(JSON.stringify(purchase))
-  }
-});`]
+    getCoupon: ${props.getCoupon}`]
       default:
         return '';
     }
@@ -957,13 +957,26 @@ openPopup("my_buy_popup", {
             acceptedPaymentMethods: props.acceptedPaymentMethods,
             allowCoupon: props.allowCoupon,
             getCoupon: async (code) => {
+              // simulate your api latency
               await new Promise(resolve => setTimeout(resolve, 500));
 
+              // coupon list
               const coupons = {
                 "PERC10": { discount: 10, type: "percent" },
                 "FIX20": { discount: 20, type: "fixed" }
               };
-              return coupons[code];
+
+              // get current coupon object
+              const coupon = coupons[code];
+
+              // if the coupon is valid
+              if (coupon) {
+                // if is, returns the coupon object
+                return { coupon: coupon }
+              } else {
+                // if not, returns error: true and errorMessage
+                return { error: true, errorMessage: "Cupom inválido" }
+              }
             },
             onBuy: (purchase) => alert(JSON.stringify(purchase))
           }
@@ -1034,14 +1047,14 @@ openPopup("my_buy_popup", {
         data: {
           message: "Este popup será fechado automaticamente em 5 segundos",
           title: "Temporizador",
-          icon: "clock" // string customizada
+          icon: "⏰" // string customizada
         }
       }),
       code: `openPopup("generic", { 
   timeout: 5000,
   data: { 
     message: "Fecha em 5 segundos",
-    icon: "clock"
+    icon: "⏰"
   } 
 })`
     },
@@ -1358,6 +1371,511 @@ function stopInterval() { // Boa prática: garanta que o interval seja limpo ao 
     }
   ];
 
+
+  // --- NOVO ARRAY PARA O CARROSSEL ---
+  /*
+    Este array completo combina os 8 exemplos iniciais,
+    os 10 exemplos intermediários e os 10 exemplos avançados.
+  
+    Assumindo importação dos ícones:
+    import { FaTrashAlt, FaCheck, FaUserCircle, FaCrop, FaEnvelope, FaHtml5, FaQuestionCircle, FaExclamationTriangle, FaShoppingCart, FaInfoCircle,
+             FaWrench, FaTags, FaLock, FaCalendarAlt, FaAddressCard, FaSlidersH, FaFileAlt, FaGlobe, FaUserPlus, FaRegCreditCard,
+             FaSitemap, FaKey, FaChartPie, FaBroadcastTower, FaMicrophoneAlt, FaPalette, FaMoneyBillWave, FaStar, FaTimesCircle, FaHourglassHalf } from 'react-icons/fa';
+  */
+
+  const carouselDemos = [
+    // ====================================================================
+    // 🟢 Conjunto 1: Exemplos Iniciais
+    // ====================================================================
+    {
+      id: 'confirm-del',
+      label: 'Confirmar Exclusão',
+      icon: <FaTrashAlt size={24} color="#e53e3e" />,
+      type: "confirm",
+      props: { title: "Excluir item?", message: "Esta ação é permanente e não pode ser desfeita.", icon: "🗑️", confirmLabel: "Sim, Excluir", confirmStyle: "Danger" }
+    },
+    {
+      id: 'generic-success',
+      label: 'Sucesso',
+      icon: <FaCheck size={24} color="#48bb78" />,
+      type: "generic",
+      props: { title: "Ação Completa!", message: "O seu perfil foi atualizado com sucesso.", icon: "✅" }
+    },
+    {
+      id: 'loading',
+      label: 'Carregando',
+      icon: <SiStagetimer />,
+      type: "generic",
+      hiddenFooter: true,
+      hiddenHeader: true,
+      minWidth: "0px",
+      timeout: 3000,
+      closeOnClickOutside: false,
+      closeOnEscape: false,
+      onClose: () => {
+        openPopup("generic", {
+          hiddenFooter: true,
+          hiddenHeader: true,
+          minWidth: "0px",
+          timeout: 3000,
+          closeOnClickOutside: false,
+          closeOnEscape: false,
+          onClose: () => {
+            openPopup("generic", {
+              data: {
+                message: "Atualizado com sucesso!",
+                icon: "✅",
+                title: "Sucesso!"
+              }
+            })
+          },
+          data: {
+            message: "Pensando..."
+          }
+        })
+      },
+      props: { message: <span className="loader"></span> }
+    },
+    {
+      id: 'crop-avatar',
+      label: 'Cortar Avatar (Círculo)',
+      icon: <FaUserCircle size={24} color="#6366f1" />,
+      type: "crop_image",
+      props: { title: "Cortar Avatar", format: "circle", image: "https://cdn.nemtudo.me/f/nemtudo/MjAyNS8xMC8yNC9JTUFHRS8yMl8zOF80MF9fMTc2MTM1NjMyMDUyMi0zOTMyNzczMw.webp" }
+    },
+    {
+      id: 'crop-banner',
+      label: 'Cortar Banner (16:4)',
+      icon: <FaCrop size={24} color="#f6ad55" />,
+      type: "crop_image",
+      props: { title: "Cortar Banner", format: "square", aspectRatio: "16:4", image: "https://cdn.nemtudo.me/f/nemtudo/MjAyNS8xMC8yNy9JTUFHRS8yMl81MV81NV9fMTc2MTYxNjMxNTM4NC01NDE1Mzc5OTg.webp" }
+    },
+    {
+      id: 'form-email',
+      label: 'Formulário de Contato',
+      icon: <FaEnvelope size={24} color="#3182ce" />,
+      type: "form",
+      props: { title: "Entre em Contato", message: "Envie sua mensagem e retornaremos em breve.", icon: "💬", components: [{ id: "name", type: "text", label: "Nome", required: true, placeholder: "First name" }, { id: "email", type: "email", label: "E-mail", required: true, placeholder: "email" }, { id: "message", type: "textarea", label: "Mensagem" }] }
+    },
+    {
+      id: 'html-custom',
+      label: 'HTML Customizado',
+      icon: <FaHtml5 size={24} color="#dd6b20" />,
+      type: "html",
+      props: {
+        html: ({ closePopup }) => (
+          <div style={{ color: "black", padding: "20px", textAlign: "center", background: "#fefcbf", borderRadius: "8px" }}>
+            <h2>Atenção! 🚨</h2>
+            <p>Este popup foi renderizado usando HTML e CSS inline.</p>
+            <button onClick={() => closePopup(true)} style={{ marginTop: "10px", background: "#f6e05e", border: "1px solid #ecc94b", padding: "8px", borderRadius: "4px", cursor: "pointer" }}>OK</button>
+          </div>
+        )
+      }
+    },
+    {
+      id: 'confirm-logout',
+      label: 'Confirmação de Logout',
+      icon: <FaQuestionCircle size={24} color="#319795" />,
+      type: "confirm",
+      props: { title: "Sair da conta?", message: "Seus dados não salvos serão perdidos.", icon: "👋", confirmLabel: "Logout", cancelLabel: "Ficar" }
+    },
+    {
+      id: 'generic-alert',
+      label: 'Alerta de Erro',
+      icon: <FaExclamationTriangle size={24} color="#e53e3e" />,
+      type: "generic",
+      props: { title: "Falha na Transação", message: "Ocorreu um erro. Tente novamente.", icon: "❌" }
+    },
+    {
+      id: 'buy-product',
+      label: 'Custom: Comprar Produto',
+      icon: <FaShoppingCart size={24} color="#9f7aea" />,
+      type: "my_buy_popup", // Tipo customizado não built-in
+      props: {
+        productName: "Super Console",
+        productPrice: 499.90,
+        productImage: "https://cdn.nemtudo.me/f/nemtudo/MjAyNS8xMC8yNy9JTUFHRS8yMl8xNl8wOF9fMTc2MTYxNDE2ODE1Mi0zNzU0NDExNDY.webp",
+        productDescription: "O melhor console da nova geração. Aproveite!",
+        productStock: 5
+      }
+    },
+    {
+      id: 'generic-info',
+      label: 'Aviso Importante',
+      icon: <FaInfoCircle size={24} color="#3182ce" />,
+      type: "generic",
+      props: { title: "Atualização", message: <p>Nossos <a href="#" ntpopups-css="true">termos de serviço</a> foram atualizados.</p>, icon: "🔔" }
+    },
+
+    // ====================================================================
+    // 🟡 Conjunto 2: Exemplos Intermediários
+    // ====================================================================
+    {
+      id: 'form-settings',
+      label: 'Form: Configurações do Usuário',
+      icon: <FaWrench size={24} color="#a0aec0" />,
+      type: "form",
+      props: {
+        title: "Preferências de Conta",
+        message: "Personalize como sua conta se comporta.",
+        icon: "⚙️",
+        components: [
+          { id: "theme", type: "select", label: "Tema", defaultValue: "Dark", options: ["Light", "Dark", "System"], required: true },
+          [ // Campos inline
+            { id: "age", type: "number", label: "Idade", min: 18, max: 99, placeholder: "Mínimo 18" },
+            { id: "timezone", type: "text", label: "Fuso Horário", required: true, defaultValue: "UTC-3" }
+          ]
+        ]
+      }
+    },
+    {
+      id: 'generic-discount',
+      label: 'Generic: Popup de Oferta',
+      icon: <FaTags size={24} color="#ed64a6" />,
+      type: "generic",
+      props: {
+        title: "Oferta Exclusiva! 🎉",
+        message: <p>Use o cupom <b>NTPOPUPS20</b> para 20% OFF na sua primeira compra!</p>,
+        closeLabel: "Aproveitar Agora",
+        icon: "🎁"
+      }
+    },
+    {
+      id: 'form-appointment',
+      label: 'Form: Agendamento de Serviço',
+      icon: <FaCalendarAlt size={24} color="#d53f8c" />,
+      type: "form",
+      width: "400px",
+      props: {
+        title: "Agendar Reunião",
+        doneLabel: "Agendar",
+        icon: "📅",
+        components: [
+          { id: "service", type: "select", label: "Serviço", required: true, options: ["Suporte Técnico", "Consultoria", "Demonstração"] },
+          { id: "date", type: "date", label: "Data Preferencial", required: true, minDate: new Date() },
+          { id: "time", type: "time", label: "Horário", required: true }
+        ]
+      }
+    },
+    {
+      id: 'form-address',
+      label: 'Form: Cadastro de Endereço',
+      icon: <FaAddressCard size={24} color="#38a169" />,
+      type: "form",
+      props: {
+        title: "Novo Endereço de Entrega",
+        message: "Preencha todos os campos obrigatórios (*).",
+        icon: "🏠",
+        doneLabel: "Salvar Endereço",
+        components: [
+          [
+            { id: "cep", type: "text", label: "CEP", required: true, placeholder: "00000-000", minLength: 8, maxLength: 9 },
+            { id: "state", type: "select", label: "Estado", required: true, options: ["SP", "RJ", "MG", "Outro"] }
+          ],
+          { id: "street", type: "text", label: "Rua/Avenida", required: true, placeholder: "Rua..." },
+          [
+            { id: "number", type: "number", label: "Número", required: true, min: 1, placeholder: "01" },
+            { id: "complement", type: "text", label: "Complemento (Opcional)", required: false, placeholder: "Complemento" }
+          ]
+        ]
+      }
+    },
+    {
+      id: 'generic-terms',
+      label: 'Generic: Aceitar Termos',
+      icon: <FaFileAlt size={24} color="#805ad5" />,
+      type: "generic",
+      requireAction: true,
+      maxHeight: "min(500px, 90dvh)",
+      maxWidth: "min(500px, 50dvw)",
+      props: {
+        title: "Leia os Termos de Serviço",
+        message: <>
+          <h4>Seção 1: Uso da Plataforma</h4>
+          <p>Ao utilizar nossa plataforma, você concorda em não infringir os direitos de terceiros...</p>
+          <p>...</p>
+          <h4>Seção 2: Privacidade de Dados</h4>
+          <p>Nós coletamos e processamos seus dados conforme nossa Política de Privacidade...</p>
+          <p>...</p>
+          <h4>Seção 3: Lorem ipsum dolor</h4>
+          <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Excepturi nesciunt nulla vitae sint ut, delectus est quidem quos hic. Voluptatum expedita voluptatem minima iure! Dicta aut error nemo itaque doloremque?</p>
+          <p>...</p>
+          <h4>Seção 4: Lorem ipsum dolor</h4>
+          <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Excepturi nesciunt nulla vitae sint ut, delectus est quidem quos hic. Voluptatum expedita voluptatem minima iure! Dicta aut error nemo itaque doloremque?</p>
+          <p>...</p>
+          <h4>Seção 5: Lorem ipsum dolor</h4>
+          <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Excepturi nesciunt nulla vitae sint ut, delectus est quidem quos hic. Voluptatum expedita voluptatem minima iure! Dicta aut error nemo itaque doloremque?</p>
+          <p>...</p>
+          <h4>Seção 6: Lorem ipsum dolor</h4>
+          <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Excepturi nesciunt nulla vitae sint ut, delectus est quidem quos hic. Voluptatum expedita voluptatem minima iure! Dicta aut error nemo itaque doloremque?</p>
+          <p>...</p>
+          <h4>Seção 7: Lorem ipsum dolor</h4>
+          <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Excepturi nesciunt nulla vitae sint ut, delectus est quidem quos hic. Voluptatum expedita voluptatem minima iure! Dicta aut error nemo itaque doloremque?</p>
+          <p>...</p>
+          <h4>Seção 8: Lorem ipsum dolor</h4>
+          <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Excepturi nesciunt nulla vitae sint ut, delectus est quidem quos hic. Voluptatum expedita voluptatem minima iure! Dicta aut error nemo itaque doloremque?</p>
+          <p>...</p>
+          <h4>Seção 9: Lorem ipsum dolor</h4>
+          <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Excepturi nesciunt nulla vitae sint ut, delectus est quidem quos hic. Voluptatum expedita voluptatem minima iure! Dicta aut error nemo itaque doloremque?</p>
+          <p>...</p>
+          <h4>Seção 10: Lorem ipsum dolor</h4>
+          <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Excepturi nesciunt nulla vitae sint ut, delectus est quidem quos hic. Voluptatum expedita voluptatem minima iure! Dicta aut error nemo itaque doloremque?</p>
+          <p>...</p>
+          <h4>Seção 11: Lorem ipsum dolor</h4>
+          <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Excepturi nesciunt nulla vitae sint ut, delectus est quidem quos hic. Voluptatum expedita voluptatem minima iure! Dicta aut error nemo itaque doloremque?</p>
+          <p>...</p>
+        </>,
+        closeLabel: "Li e aceito",
+        icon: "📜"
+      }
+    },
+    {
+      id: 'form-lang',
+      label: 'Form: Seleção de Idioma',
+      icon: <FaGlobe size={24} color="#4c51bf" />,
+      type: "form",
+      props: {
+        title: "Escolha o Idioma",
+        doneLabel: "Salvar",
+        icon: "🌐",
+        components: [
+          {
+            id: "language",
+            type: "select",
+            label: "Idioma da Interface",
+            required: true,
+            defaultValue: 'pt',
+            options: [
+              { label: 'Português (Brasil)', value: 'pt' },
+              { label: 'English (US)', value: 'en' },
+              { label: 'Español', value: 'es' }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      id: 'form-signup',
+      label: 'Form: Cadastro Rápido',
+      icon: <FaUserPlus size={24} color="#e65100" />,
+      type: "form",
+      props: {
+        title: "Crie sua Conta Gratuita",
+        doneLabel: "Cadastrar",
+        icon: "✨",
+        components: [
+          { id: "email", type: "email", label: "E-mail", required: true },
+          { id: "password", type: "password", label: "Senha", required: true, minLength: 8 },
+          { id: "accept_terms", type: "checkbox", label: "Aceito os Termos de Uso", required: true }
+        ]
+      }
+    },
+    {
+      id: 'confirm-payment',
+      label: 'Confirm: Finalizar Compra',
+      icon: <FaRegCreditCard size={24} color="#f6e05e" />,
+      type: "confirm",
+      props: {
+        title: "Confirmar Pagamento",
+        message: "O valor de R$ 99,90 será debitado do seu cartão. Confirma a transação?",
+        icon: "💳",
+        confirmLabel: "Pagar R$ 99,90",
+        cancelLabel: "Revisar Pedido",
+        confirmStyle: "Success"
+      }
+    },
+    {
+      id: 'crop-article-image',
+      label: 'Cortar Imagem de Artigo (4:3)',
+      icon: <FaCrop size={24} color="#90cdf4" />,
+      type: "crop_image",
+      props: {
+        title: "Imagem do Artigo",
+        format: "square",
+        aspectRatio: "4:3",
+        image: "https://cdn.nemtudo.me/f/nemtudo/MjAyNS8xMC8yNC9JTUFHRS8yMl8zOF80MF9fMTc2MTM1NjMyMDUyMi0zOTMyNzczMw.webp",
+        requireAction: true
+      }
+    },
+
+    // ====================================================================
+    // 🔴 Conjunto 3: Exemplos Avançados
+    // ====================================================================
+    {
+      id: 'form-url-config',
+      label: 'Form: Configurar Slug/URL',
+      icon: <FaSitemap size={24} color="#f6ad55" />,
+      type: "form",
+      props: {
+        title: "Definir URL Amigável",
+        message: "Use apenas letras minúsculas, números e hífens.",
+        icon: "🔗",
+        doneLabel: "Salvar Slug",
+        components: [
+          {
+            id: "slug",
+            type: "text",
+            label: "URL Slug",
+            required: true,
+            placeholder: "meu-artigo-excelente",
+            matchRegex: '^[a-z0-9-]+$',
+            minLength: 5
+          }
+        ]
+      }
+    },
+    {
+      id: 'form-revalidate-pass',
+      label: 'Form: Revalidação de Senha',
+      icon: <FaKey size={24} color="#718096" />,
+      type: "form",
+      requireAction: true,
+      props: {
+        title: "Confirme Sua Identidade",
+        message: "Insira sua senha atual para prosseguir com a alteração crítica.",
+        icon: "🔒",
+        doneLabel: "Confirmar Senha",
+        components: [
+          {
+            id: "current_password",
+            type: "password",
+            label: "Senha Atual",
+            required: true,
+            minLength: 8
+          }
+        ]
+      }
+    },
+    {
+      id: 'generic-maintenance',
+      label: 'Generic: Aviso de Manutenção',
+      icon: <FaHourglassHalf size={24} color="#ecc94b" />,
+      type: "generic",
+      props: {
+        title: "Sistema em Manutenção",
+        message: "Estaremos offline por cerca de 30 minutos para melhorias. Pedimos desculpas pelo transtorno.",
+        closeLabel: "Entendi",
+        icon: "⏳"
+      }
+    },
+    {
+      id: 'confirm-cancel-sub',
+      label: 'Confirm: Cancelar Assinatura',
+      icon: <FaTimesCircle size={24} color="#c53030" />,
+      type: "confirm",
+      props: {
+        title: "Cancelar Assinatura?",
+        message: "Você perderá o acesso premium no final do ciclo de cobrança. Deseja prosseguir?",
+        icon: "💔",
+        confirmLabel: "Sim, Cancelar",
+        confirmStyle: "Danger",
+        cancelLabel: "Manter Assinatura"
+      }
+    },
+    {
+      id: 'form-multi-upload',
+      label: 'Form: Upload de Múltiplos Arquivos',
+      icon: <FaFileAlt size={24} color="#48bb78" />,
+      type: "form",
+      props: {
+        title: "Enviar Documentos",
+        message: "Anexe todos os comprovantes necessários.",
+        icon: "📂",
+        components: [
+          {
+            id: "documents",
+            type: "file",
+            label: "Comprovantes (PDF/JPG)",
+            accept: '.pdf,.jpg,.jpeg',
+            multiple: true,
+            required: true
+          }
+        ]
+      }
+    },
+    {
+      id: 'form-rating',
+      label: 'Form: Enviar Feedback (Rating Custom)',
+      icon: <FaStar size={24} color="#f6e05e" />,
+      type: "form",
+      props: {
+        title: "Avalie Nosso Serviço",
+        message: "Dê sua nota e um breve comentário.",
+        icon: "⭐",
+        doneLabel: "Enviar Avaliação",
+        customComponents: {
+          'star_rating': {
+            emptyValue: 0,
+            validator: (value) => value < 1 ? "A avaliação é obrigatória" : null,
+            render: (props) => {
+              const positiveStars = [];
+              const emptyStars = [];
+
+              for (let i = 0; i < 5; i++) {
+                if (i < props.value) {
+                  positiveStars.push(
+                    <span style={{ cursor: "pointer", color: "#ffc80" }} key={`filled-${i}`} onClick={() => props.changeValue(i + 1)}>
+                      ★
+                    </span>
+                  );
+                } else {
+                  emptyStars.push(
+                    <span style={{ cursor: "pointer" }} key={`empty-${i}`} onClick={() => props.changeValue(i + 1)}>
+                      ☆
+                    </span>
+                  );
+                }
+              }
+
+              return (
+                <div style={{ fontSize: "2rem" }}>
+                  {[...positiveStars, ...emptyStars]}
+                </div>
+              );
+            }
+          }
+        },
+        components: [
+          { id: "rating", type: "star_rating", label: "Nota (1-5)", required: true, defaultValue: 0 },
+          { id: "comment", type: "textarea", label: "Comentário (Opcional)", maxLength: 150 }
+        ]
+      }
+    },
+    {
+      id: 'crop-social-post',
+      label: 'Cortar Imagem (Post 1:1)',
+      icon: <FaCrop size={24} color="#90cdf4" />,
+      type: "crop_image",
+      props: {
+        title: "Corte para Redes Sociais",
+        format: "square",
+        aspectRatio: "1:1",
+        image: "https://cdn.nemtudo.me/f/nemtudo/MjAyNS8xMC8yNC9JTUFHRS8yMl8zOF80MF9fMTc2MTM1NjMyMDUyMi0zOTMyNzczMw.webp",
+        minZoom: 1.5
+      }
+    },
+    {
+      id: 'generic-billing-warning',
+      label: 'Generic: Aviso de Cobrança',
+      icon: <FaMoneyBillWave size={24} color="#008000" />,
+      type: "generic",
+      props: {
+        title: "Pagamento Pendente!",
+        message: "Sua fatura está vencida. Atualize seu método de pagamento imediatamente para evitar interrupção do serviço.",
+        closeLabel: "Ir para Pagamento",
+        icon: "⚠️"
+      }
+    },
+  ];
+
+  // Função auxiliar para abrir o popup do carrossel
+  const handleOpenCarouselPopup = (demo) => {
+    openPopup(demo.type, {
+      data: demo.props,
+      ...demo,
+    });
+  }
+
   return (
     <>
       <div className="container">
@@ -1401,6 +1919,7 @@ function stopInterval() { // Boa prática: garanta que o interval seja limpo ao 
                     <FaSun size={14} style={{ marginRight: '0.4rem' }} /> Light
                   </button>
                 </div>
+                <span style={{ color: "gray" }}>O idioma atualiza os textos padrões, erros e textos nativos dos popuops</span>
               </div>
               <div className="settingGroup">
                 <span className="settingLabel">Idioma</span>
@@ -1418,7 +1937,6 @@ function stopInterval() { // Boa prática: garanta que o interval seja limpo ao 
                     <FaGlobe size={14} style={{ marginRight: '0.4rem' }} /> EN
                   </button>
                 </div>
-                <span style={{ color: "gray" }}>O idioma atualiza os textos padrões, erros e textos nativos dos popuops</span>
               </div>
             </div>
             <CodeBlock code={`"use client";
@@ -1435,6 +1953,45 @@ export default function PopupContext({ children }) {
 }`} />
           </div>
         </section>
+        <section className="examplesSection">
+          <div className="sectionContent">
+            <h2 className="sectionTitle"><FaRocket size={22} style={{ marginRight: '0.75rem' }} /> Exemplos de Popups</h2>
+            <p className="sectionDescription">
+              Clique nos cards abaixo para testar diversos casos de uso comuns de popups.
+            </p>
+          </div>
+
+          <div className="carouselWrapper">
+            <div className="carouselContainer">
+              {/* Duplica a lista para garantir o loop infinito suave */}
+              {carouselDemos.map((demo, index) => (
+                <div key={`1-${index}`} className="carouselCard" onClick={() => handleOpenCarouselPopup(demo)}>
+                  <div className="cardIcon">{demo.icon}</div>
+                  <h4 className="cardTitle">{demo.label}</h4>
+                  <span className={`cardType ${demo.type}`}>{demo.type}</span>
+                </div>
+              ))}
+              {carouselDemos.map((demo, index) => (
+                <div key={`2-${index}`} className="carouselCard" onClick={() => handleOpenCarouselPopup(demo)}>
+                  <div className="cardIcon">{demo.icon}</div>
+                  <h4 className="cardTitle">{demo.label}</h4>
+                  <span className={`cardType ${demo.type}`}>{demo.type}</span>
+                </div>
+              ))}
+              {carouselDemos.map((demo, index) => (
+                <div key={`2-${index}`} className="carouselCard" onClick={() => handleOpenCarouselPopup(demo)}>
+                  <div className="cardIcon">{demo.icon}</div>
+                  <h4 className="cardTitle">{demo.label}</h4>
+                  <span className={`cardType ${demo.type}`}>{demo.type}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+        {/* // ---------------------------------------------------------------------
+        // --- FIM DA NOVA SEÇÃO ---
+        // ---------------------------------------------------------------------
+        */}
 
         <section className="mainSection">
           <div className="sectionContent">

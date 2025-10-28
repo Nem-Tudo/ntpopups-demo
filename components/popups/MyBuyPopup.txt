@@ -19,7 +19,7 @@ export default function MyBuyPopup({
         freeShippingThreshold = 10.00,
         acceptedPaymentMethods = ["Cartão de Crédito", "PIX"],
         allowCoupon = true,
-        getCoupon = (code) => null,
+        getCoupon = (code) => { return { error: true, errorMessage: "Invalid coupon" } },
         onBuy = () => { }
     } = {}
 }) {
@@ -60,14 +60,14 @@ export default function MyBuyPopup({
         }
 
         setCouponLoading(true);
-        const coupon = await getCoupon(trimmedCode)
+        const { error, errorMessage, coupon } = await getCoupon(trimmedCode)
         setCouponLoading(false)
 
-        if (coupon) {
+        if (!error) {
             setAppliedCoupon(coupon);
             setCouponError("");
         } else {
-            setCouponError("Cupom inválido");
+            setCouponError(errorMessage || "Invalid coupon");
             setAppliedCoupon(null);
         }
     };

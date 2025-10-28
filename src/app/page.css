@@ -705,3 +705,183 @@ textarea.propInput {
         grid-template-columns: 1fr;
     }
 }
+
+/* --- Estilos da Nova Seção do Carrossel (Examples Popups) --- */
+
+.examplesSection {
+    /* Estilos de seção reutilizados */
+    background: white;
+    /* border-radius: 16px; */
+    padding: 48px 0;
+    margin-bottom: 40px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    mask: linear-gradient(90deg, #ffffff00, black 10%, black calc(100% - 10%), transparent);
+    -webkit-mask: linear-gradient(90deg, #ffffff00, black 10%, black calc(100% - 10%), transparent);
+    /* Garante que o carrossel não cause overflow horizontal na página */
+}
+
+/* Wrapper principal do carrossel (cria a área de visualização) */
+.carouselWrapper {
+    width: 100%;
+    overflow: hidden;
+    /* Esconde as cópias invisíveis */
+    padding: 20px 0;
+    margin: 0 auto;
+}
+
+/* Contêiner que contém todos os cards (incluindo as cópias) */
+.carouselContainer {
+    display: flex;
+    gap: 20px;
+    padding-bottom: 20px;
+    /* Espaçamento para garantir que a sombra do card seja visível */
+
+    /* Configuração da animação: nome, duração, timing, delay, repetição */
+    animation: scroll-left 140s linear infinite;
+    /* A duração e o 'calc' abaixo devem ser ajustados se o número de cards mudar muito */
+    width: calc(350px * 3 * 29);
+    /* Ex: 10 cards originais + 10 cópias * 350px (largura do card + gap) */
+    display: flex;
+    flex-wrap: wrap;
+}
+
+/* Animação Keyframes para a rolagem da direita para a esquerda */
+@keyframes scroll-left {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        /* Move 50% da largura total (o tamanho da lista original) */
+        transform: translateX(calc(-50% - 10px));
+        /* -10px adicional por causa do gap no início do segundo bloco, 
+       mas 50% já deve ser suficiente para maioria dos casos se for uma cópia idêntica */
+    }
+}
+
+/* Estilo do Card individual */
+.carouselCard {
+    flex-shrink: 0;
+    /* Impede que os cards encolham */
+    width: 330px;
+    /* Largura definida para todos os cards */
+    background: #f7fafc;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.carouselCard:hover {
+    border-color: #667eea;
+    background: #ffffff;
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.15);
+    transform: translateY(-4px);
+}
+
+.cardIcon {
+    margin-bottom: 12px;
+    height: 32px;
+    width: 32px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.cardTitle {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #2d3748;
+    margin: 0 0 8px 0;
+}
+
+.cardType {
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 4px 8px;
+    border-radius: 6px;
+    text-transform: uppercase;
+    color: white;
+    margin-top: auto;
+}
+
+/* Cores por Tipo */
+.cardType.generic {
+    background: #4299e1;
+}
+
+/* Blue */
+.cardType.confirm {
+    background: #f6ad55;
+}
+
+/* Orange */
+.cardType.crop_image {
+    background: #9f7aea;
+}
+
+/* Purple */
+.cardType.form {
+    background: #48bb78;
+}
+
+/* Green */
+.cardType.html {
+    background: #e53e3e;
+}
+
+/* Red */
+.cardType.my_user_popup,
+.cardType.my_buy_popup {
+    background: #667eea;
+}
+
+/* Indigo */
+
+
+/* Mobile Responsiveness for Carousel */
+@media (max-width: 768px) {
+    .examplesSection {
+        padding: 32px 0;
+        /* Remove padding lateral para telas menores, deixando o carrossel full width */
+    }
+
+    .examplesSection .sectionContent {
+        padding: 0 20px;
+        /* Adiciona padding de volta ao conteúdo, exceto ao carrossel */
+    }
+
+    .carouselWrapper {
+        padding: 0;
+        /* Remove padding vertical */
+        width: 100%;
+        margin-left: -20px;
+        /* Compensação de 20px para iniciar o carrossel na borda */
+    }
+
+    .carouselContainer {
+        gap: 16px;
+    }
+
+    .carouselCard {
+        width: 250px;
+        /* Cards menores em mobile */
+    }
+
+    @keyframes scroll-left {
+        0% {
+            transform: translateX(0);
+        }
+
+        100% {
+            transform: translateX(calc(-50% - 8px));
+            /* Ajuste de translação para mobile */
+        }
+    }
+}
