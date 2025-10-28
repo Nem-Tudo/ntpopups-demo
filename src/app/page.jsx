@@ -2049,7 +2049,7 @@ export default function PopupContext({ children }) {
                         demo.type === "form" && <div className="propwarn"><span>Veja o editor completo de componentes de formulário logo abaixo nessa página</span></div>
                       }
                       {
-                        demo.type.startsWith("my") && <div className="propwarn"><span>Aprenda tudo sobre popups customizados lendo a <a target="_blank" href="https://ntpopups.nemtudo.me/creating-custom-popups/">Documentação Oficial</a></span></div>
+                        demo.type.startsWith("my") && <div className="propwarn"><span>Aprenda tudo sobre popups customizados lendo a <a target="_blank" href="https://ntpopups.nemtudo.me/custom-popups/">Documentação Oficial</a></span></div>
                       }
                       {demo.properties.map(prop => {
                         return <div key={prop.key} className="propField">
