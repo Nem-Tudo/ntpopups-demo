@@ -160,7 +160,7 @@
     background: #f9fafb;
 }
 
-/* --- ESTILOS DOS CARDS (mantidos) --- */
+/* --- CARD STYLES (kept) --- */
 .demoGrid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -225,7 +225,7 @@
     transform: scale(1.1);
 }
 
-/* --- EDITOR DE PROPS (DEMOS) --- */
+/* --- PROPS EDITOR (DEMOS) --- */
 .propsEditor {
     background: #f9fafb;
     border: 1px solid #e0e0e0;
@@ -261,7 +261,7 @@
 }
 
 /* // ---------------------------------------------------------------------
-// --- ESTILOS DO FORM BUILDER (Lista de Componentes) ---
+// --- FORM BUILDER STYLES (Component List) ---
 // ---------------------------------------------------------------------
 */
 
@@ -273,18 +273,18 @@
 .mainPropsEditor {
     background: white;
     border: 1px solid #e5e7eb;
-    /* Borda mais suave */
+    /* Softer border */
     margin-bottom: 2rem;
 }
 
-/* Regras de .propField, .propLabel, .propInput, .propGrid
-    são compartilhadas entre .propsEditor e .propertyEditorPanel.
-    As novas regras de UI serão aplicadas a ambos. */
+/* Rules for .propField, .propLabel, .propInput, .propGrid
+    are shared between .propsEditor and .propertyEditorPanel.
+    The new UI rules will be applied to both. */
 
 .formBuilderEditor {
     display: grid;
     grid-template-columns: 1fr 1.5fr;
-    /* Coluna da lista | Coluna do editor */
+    /* List column | Editor column */
     gap: 1.5rem;
     min-height: 710px;
 }
@@ -398,7 +398,7 @@
     display: flex;
     gap: 0.5rem;
     margin-top: auto;
-    /* Alinha no final */
+    /* Aligns to the bottom */
     padding-top: 1rem;
     border-top: 1px solid #e0e0e0;
 }
@@ -436,7 +436,7 @@
 }
 
 /* // ---------------------------------------------------------------------
-// --- NOVOS ESTILOS: EDITOR DE PROPRIEDADES (Form Builder) ---
+// --- NEW STYLES: PROPERTY EDITOR (Form Builder) ---
 // ---------------------------------------------------------------------
 */
 
@@ -444,7 +444,7 @@
     border: 1px solid #e0e0e0;
     border-radius: 12px;
     background: white;
-    /* Fundo branco para destacar os inputs */
+    /* White background to highlight inputs */
     overflow-y: auto;
     /* max-height: 600px; */
 }
@@ -455,13 +455,13 @@
     justify-content: center;
     height: 100%;
     color: #888;
-    /* Mais sutil */
+    /* More subtle */
     font-size: 1rem;
-    /* Um pouco menor */
+    /* Slightly smaller */
     text-align: center;
     padding: 2rem;
     font-style: italic;
-    /* Indica que é um placeholder */
+    /* Indicates it's a placeholder */
 }
 
 .propEditorContent {
@@ -470,11 +470,11 @@
 
 .propEditorContent h4 {
     margin: 0 0 0.25rem;
-    /* Menos margem inferior */
+    /* Less bottom margin */
     font-size: 1.25rem;
-    /* Mais destaque */
+    /* More prominent */
     font-weight: 700;
-    /* Mais destaque */
+    /* More prominent */
     color: #1a1a2e;
 }
 
@@ -492,53 +492,53 @@
     font-size: 0.8rem;
     font-weight: 600;
     margin-bottom: 1.5rem;
-    /* Separa o header do conteúdo */
+    /* Separates header from content */
 }
 
 .propEditorHr {
     border: 0;
     border-top: 1px solid #e5e7eb;
-    /* Borda mais suave */
+    /* Softer border */
     margin: 0 0 1.5rem 0;
-    /* Alinhado com a badge */
+    /* Aligned with badge */
 }
 
-/* --- Estilos dos Inputs e Labels (Aplica-se a todos .prop*) --- */
+/* --- Input and Label Styles (Applies to all .prop*) --- */
 
 .propField {
     margin-bottom: 1.25rem;
-    /* Mais espaço entre os campos */
+    /* More space between fields */
 }
 
 .propLabel {
     display: block;
     font-size: 0.75rem;
-    /* Menor */
+    /* Smaller */
     font-weight: 600;
-    /* Mais forte */
+    /* Stronger */
     color: #6b7280;
-    /* Cinza (Tailwind gray-500) */
+    /* Gray (Tailwind gray-500) */
     text-transform: uppercase;
-    /* Moderno */
+    /* Modern */
     letter-spacing: 0.05em;
-    /* Levemente espaçado */
+    /* Slightly spaced */
     margin-bottom: 0.35rem;
-    /* Mais perto do input */
+    /* Closer to the input */
 }
 
 .propInput {
     width: 100%;
     padding: 0.65rem 0.75rem;
-    /* Mais padding interno */
+    /* More internal padding */
     border: 1px solid #d1d5db;
-    /* Cinza (Tailwind gray-300) */
+    /* Gray (Tailwind gray-300) */
     border-radius: 8px;
-    /* Mais arredondado */
+    /* More rounded */
     font-size: 0.9rem;
     background: #f9fafb;
-    /* Fundo levemente cinza */
+    /* Slightly gray background */
     color: #111827;
-    /* Preto (Tailwind gray-900) */
+    /* Black (Tailwind gray-900) */
     transition: all 0.2s ease;
 }
 
@@ -546,16 +546,16 @@
     outline: none;
     border-color: #6366f1;
     background: white;
-    /* Sombra de foco moderna */
+    /* Modern focus shadow */
     box-shadow: 0 0 0 3px #c7d2fe;
-    /* Azul (Tailwind indigo-200) */
+    /* Blue (Tailwind indigo-200) */
 }
 
 .propInput[type="checkbox"] {
     width: auto;
 }
 
-/* Estilo para Textarea (JSON, etc) */
+/* Style for Textarea (JSON, etc) */
 textarea.propInput {
     font-family: "Fira Mono", "Roboto Mono", monospace;
     font-size: 0.85rem;
@@ -570,33 +570,33 @@ textarea.propInput {
 
 .propInput:disabled {
     background: #e5e7eb;
-    /* Cinza (Tailwind gray-200) */
+    /* Gray (Tailwind gray-200) */
     color: #9ca3af;
-    /* Cinza (Tailwind gray-400) */
+    /* Gray (Tailwind gray-400) */
     cursor: not-allowed;
     border-color: #e5e7eb;
 }
 
-/* Grid para campos lado-a-lado (Min/Max) */
+/* Grid for side-by-side fields (Min/Max) */
 .propGrid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 1rem;
-    /* Mais espaço */
+    /* More space */
     margin-bottom: 1.25rem;
-    /* Espaçamento do grupo */
+    /* Group spacing */
 }
 
 .propGrid.threeCols {
     grid-template-columns: 1fr 1fr 1fr;
 }
 
-/* Remove a margem de campos dentro de um grid */
+/* Removes margin from fields inside a grid */
 .propGrid .propField {
     margin-bottom: 0;
 }
 
-/* --- Estilos dos Checkboxes (Required, Disabled, etc) --- */
+/* --- Checkbox Styles (Required, Disabled, etc) --- */
 
 .propFieldCheck {
     display: flex;
@@ -609,7 +609,7 @@ textarea.propInput {
     cursor: pointer;
     transition: all 0.2s ease;
     margin: 0;
-    /* Reset de margem, o grid controla */
+    /* Reset margin, controlled by grid */
 }
 
 .propFieldCheck:hover {
@@ -618,12 +618,12 @@ textarea.propInput {
 }
 
 .propFieldCheck span {
-    /* Alterado de 'label' para 'span' no JSX (ou 'label' se preferir) */
+    /* Changed from 'label' to 'span' in JSX (or 'label' if preferred) */
     font-size: 0.9rem;
     font-weight: 500;
     color: #333;
     user-select: none;
-    /* Impede seleção de texto */
+    /* Prevents text selection */
 }
 
 .propFieldCheck input[type="checkbox"] {
@@ -631,7 +631,7 @@ textarea.propInput {
     height: 1.1rem;
     cursor: pointer;
     accent-color: #6366f1;
-    /* Cor de acentuação moderna */
+    /* Modern accent color */
 }
 
 .codeBlockContainer {
@@ -654,7 +654,7 @@ textarea.propInput {
     right: 0.5rem;
     padding: 0.35rem 0.7rem;
     background: #8a8a8a;
-    /* Cor escura discreta */
+    /* Subtle dark color */
     color: white;
     border: none;
     border-radius: 6px;
@@ -672,7 +672,7 @@ textarea.propInput {
     background: #555;
 }
 
-/* --- MEDIA QUERIES (mantidos) --- */
+/* --- MEDIA QUERIES (kept) --- */
 
 @media (max-width: 768px) {
     .logo {
@@ -693,7 +693,7 @@ textarea.propInput {
 
     .formBuilderEditor {
         grid-template-columns: 1fr;
-        /* Empilha as colunas em mobile */
+        /* Stacks columns on mobile */
     }
 
     .propertyEditorPanel {
@@ -706,10 +706,10 @@ textarea.propInput {
     }
 }
 
-/* --- Estilos da Nova Seção do Carrossel (Examples Popups) --- */
+/* --- Styles for the New Carousel Section (Examples Popups) --- */
 
 .examplesSection {
-    /* Estilos de seção reutilizados */
+    /* Reused section styles */
     background: white;
     /* border-radius: 16px; */
     padding: 48px 0;
@@ -718,54 +718,54 @@ textarea.propInput {
     overflow: hidden;
     mask: linear-gradient(90deg, #ffffff00, black 10%, black calc(100% - 10%), transparent);
     -webkit-mask: linear-gradient(90deg, #ffffff00, black 10%, black calc(100% - 10%), transparent);
-    /* Garante que o carrossel não cause overflow horizontal na página */
+    /* Ensures the carousel does not cause horizontal page overflow */
 }
 
-/* Wrapper principal do carrossel (cria a área de visualização) */
+/* Main carousel wrapper (creates the viewing area) */
 .carouselWrapper {
     width: 100%;
     overflow: hidden;
-    /* Esconde as cópias invisíveis */
+    /* Hides invisible copies */
     padding: 20px 0;
     margin: 0 auto;
 }
 
-/* Contêiner que contém todos os cards (incluindo as cópias) */
+/* Container holding all cards (including copies) */
 .carouselContainer {
     display: flex;
     gap: 20px;
     padding-bottom: 20px;
-    /* Espaçamento para garantir que a sombra do card seja visível */
+    /* Spacing to ensure card shadow is visible */
 
-    /* Configuração da animação: nome, duração, timing, delay, repetição */
+    /* Animation setup: name, duration, timing, delay, repetition */
     animation: scroll-left 140s linear infinite;
-    /* A duração e o 'calc' abaixo devem ser ajustados se o número de cards mudar muito */
+    /* Duration and 'calc' below must be adjusted if the number of cards changes significantly */
     width: calc(350px * 3 * 29);
-    /* Ex: 10 cards originais + 10 cópias * 350px (largura do card + gap) */
+    /* Ex: 10 original cards + 10 copies * 350px (card width + gap) */
     display: flex;
     flex-wrap: wrap;
 }
 
-/* Animação Keyframes para a rolagem da direita para a esquerda */
+/* Keyframes Animation for right-to-left scrolling */
 @keyframes scroll-left {
     0% {
         transform: translateX(0);
     }
 
     100% {
-        /* Move 50% da largura total (o tamanho da lista original) */
+        /* Moves 50% of total width (the size of the original list) */
         transform: translateX(calc(-50% - 10px));
-        /* -10px adicional por causa do gap no início do segundo bloco, 
-       mas 50% já deve ser suficiente para maioria dos casos se for uma cópia idêntica */
+        /* -10px additional due to the gap at the start of the second block, 
+        but 50% should be sufficient for most cases if it's an identical copy */
     }
 }
 
-/* Estilo do Card individual */
+/* Individual Card Style */
 .carouselCard {
     flex-shrink: 0;
-    /* Impede que os cards encolham */
+    /* Prevents cards from shrinking */
     width: 330px;
-    /* Largura definida para todos os cards */
+    /* Defined width for all cards */
     background: #f7fafc;
     border: 2px solid #e2e8f0;
     border-radius: 12px;
@@ -811,7 +811,7 @@ textarea.propInput {
     margin-top: auto;
 }
 
-/* Cores por Tipo */
+/* Colors by Type */
 .cardType.generic {
     background: #4299e1;
 }
@@ -849,20 +849,20 @@ textarea.propInput {
 @media (max-width: 768px) {
     .examplesSection {
         padding: 32px 0;
-        /* Remove padding lateral para telas menores, deixando o carrossel full width */
+        /* Remove side padding for smaller screens, making the carousel full width */
     }
 
     .examplesSection .sectionContent {
         padding: 0 20px;
-        /* Adiciona padding de volta ao conteúdo, exceto ao carrossel */
+        /* Adds padding back to the content, except the carousel */
     }
 
     .carouselWrapper {
         padding: 0;
-        /* Remove padding vertical */
+        /* Removes vertical padding */
         width: 100%;
         margin-left: -20px;
-        /* Compensação de 20px para iniciar o carrossel na borda */
+        /* 20px offset to start the carousel at the edge */
     }
 
     .carouselContainer {
@@ -871,7 +871,7 @@ textarea.propInput {
 
     .carouselCard {
         width: 250px;
-        /* Cards menores em mobile */
+        /* Smaller cards on mobile */
     }
 
     @keyframes scroll-left {
@@ -881,7 +881,7 @@ textarea.propInput {
 
         100% {
             transform: translateX(calc(-50% - 8px));
-            /* Ajuste de translação para mobile */
+            /* Translation adjustment for mobile */
         }
     }
 }

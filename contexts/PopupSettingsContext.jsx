@@ -1,8 +1,6 @@
 "use client";
 import React, { createContext, useContext, useState, useCallback } from "react";
 
-
-
 const PopupSettingsContext = createContext({
     updateSettings: () => {},
     settings: {}
@@ -15,12 +13,12 @@ export function PopupSettingsProvider({ children }) {
     };
     const [settings, setSettingsState] = useState(initialSettings);
 
-    // Substitui o objeto todo ou recebe uma função (prev => next)
+    // Replaces the whole object or receives a function (prev => next)
     const setSettings = useCallback((next) => {
         setSettingsState(prev => (typeof next === "function" ? next(prev) : next));
     }, []);
 
-    // Mescla um objeto parcial ao estado atual. Aceita função também.
+    // Merges a partial object into the current state. Also accepts a function.
     const updateSettings = useCallback((partial) => {
         console.log(partial)
         setSettingsState(prev => {
@@ -29,7 +27,7 @@ export function PopupSettingsProvider({ children }) {
         });
     }, []);
 
-    // Restaura para o initialSettings fornecido ao montar o provider
+    // Restores to the initialSettings provided when mounting the provider
     const resetSettings = useCallback(() => {
         setSettingsState(initialSettings);
     }, [initialSettings]);

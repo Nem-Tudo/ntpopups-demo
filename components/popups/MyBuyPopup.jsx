@@ -15,7 +15,7 @@ export default function MyBuyPopup({
         showShipping = false,
         shippingPrice = 1,
         freeShippingThreshold = 10.00,
-        acceptedPaymentMethods = ["Cartão de Crédito", "PIX"],
+        acceptedPaymentMethods = ["Credit Card", "PIX"],
         allowCoupon = true,
         getCoupon = (code) => { return { error: true, errorMessage: "Invalid coupon" } },
         onBuy = () => { }
@@ -28,7 +28,7 @@ export default function MyBuyPopup({
     const [couponError, setCouponError] = useState("");
     const [couponLoading, setCouponLoading] = useState(false);
 
-    // Cálculos
+    // Calculations
     const subtotal = productPrice * quantity;
     const shipping = showShipping && subtotal < freeShippingThreshold ? shippingPrice : 0;
 
@@ -53,7 +53,7 @@ export default function MyBuyPopup({
     const handleApplyCoupon = async () => {
         const trimmedCode = couponCode.trim().toUpperCase();
         if (!trimmedCode) {
-            setCouponError("Digite um cupom");
+            setCouponError("Enter a coupon code");
             return;
         }
 
@@ -97,25 +97,25 @@ export default function MyBuyPopup({
         closePopup(true);
     };
 
-    // Configuração das etapas
+    // Step configuration
     const STEPS = {
         1: {
-            title: "Revisar pedido",
+            title: "Review Order",
             icon: <MdShoppingCart />,
-            primaryButton: { label: "Continuar", action: handleContinue },
-            secondaryButton: { label: "Cancelar", action: () => closePopup(false) }
+            primaryButton: { label: "Continue", action: handleContinue },
+            secondaryButton: { label: "Cancel", action: () => closePopup(false) }
         },
         2: {
-            title: "Confirmar compra",
+            title: "Confirm Purchase",
             icon: <MdCheckCircle />,
-            primaryButton: { label: "Confirmar Compra", action: handleConfirm },
-            secondaryButton: { label: "Voltar", action: handleBack }
+            primaryButton: { label: "Confirm Purchase", action: handleConfirm },
+            secondaryButton: { label: "Back", action: handleBack }
         }
     };
 
     const currentStep = STEPS[step];
 
-    // Componentes reutilizáveis
+    // Reusable components
     const ProductCard = () => (
         <div style={{
             display: 'flex',
@@ -155,7 +155,7 @@ export default function MyBuyPopup({
                     fontWeight: '700',
                     color: '#2e7d32'
                 }}>
-                    R$ {productPrice.toFixed(2)}
+                    $ {productPrice.toFixed(2)}
                 </div>
             </div>
         </div>
@@ -176,7 +176,7 @@ export default function MyBuyPopup({
                     fontWeight: '500',
                     color: '#555'
                 }}>
-                    Quantidade:
+                    Quantity:
                 </span>
                 <div style={{
                     display: 'flex',
@@ -233,7 +233,7 @@ export default function MyBuyPopup({
                     fontSize: '13px',
                     color: '#888'
                 }}>
-                    {productStock - quantity} disponíveis
+                    {productStock - quantity} available
                 </span>
             </div>
         )
@@ -254,7 +254,7 @@ export default function MyBuyPopup({
             }}>
                 <span>Subtotal ({quantity}x):</span>
                 <span style={{ fontWeight: '500' }}>
-                    R$ {subtotal.toFixed(2)}
+                    $ {subtotal.toFixed(2)}
                 </span>
             </div>
             {showShipping && (
@@ -264,12 +264,12 @@ export default function MyBuyPopup({
                     marginBottom: '8px',
                     fontSize: '14px'
                 }}>
-                    <span>Frete:</span>
+                    <span>Shipping:</span>
                     <span style={{
                         fontWeight: '500',
                         color: shipping === 0 ? '#2e7d32' : '#333'
                     }}>
-                        {shipping === 0 ? 'GRÁTIS' : `R$ ${shipping.toFixed(2)}`}
+                        {shipping === 0 ? 'FREE' : `$ ${shipping.toFixed(2)}`}
                     </span>
                 </div>
             )}
@@ -280,9 +280,9 @@ export default function MyBuyPopup({
                     marginBottom: '8px',
                     fontSize: '14px'
                 }}>
-                    <span style={{ color: '#2e7d32' }}>Desconto:</span>
+                    <span style={{ color: '#2e7d32' }}>Discount:</span>
                     <span style={{ fontWeight: '500', color: '#2e7d32' }}>
-                        - R$ {discount.toFixed(2)}
+                        - $ {discount.toFixed(2)}
                     </span>
                 </div>
             )}
@@ -293,7 +293,7 @@ export default function MyBuyPopup({
                     marginBottom: '8px',
                     fontStyle: 'italic'
                 }}>
-                    Faltam R$ {(freeShippingThreshold - subtotal).toFixed(2)} para frete grátis
+                    $ {(freeShippingThreshold - subtotal).toFixed(2)} remaining for free shipping
                 </div>
             )}
             <div style={{
@@ -306,7 +306,7 @@ export default function MyBuyPopup({
             }}>
                 <span>Total:</span>
                 <span style={{ color: '#2e7d32' }}>
-                    R$ {total.toFixed(2)}
+                    $ {total.toFixed(2)}
                 </span>
             </div>
         </div>
@@ -321,13 +321,13 @@ export default function MyBuyPopup({
                 alignItems: 'center',
                 gap: '6px'
             }}>
-                <span style={{ fontWeight: '500' }}>Formas de pagamento:</span>
+                <span style={{ fontWeight: '500' }}>Payment methods:</span>
                 <span>{acceptedPaymentMethods.join(', ')}</span>
             </div>
         )
     );
 
-    // Renderização das etapas
+    // Step rendering
     const Step1Content = () => (
         <>
             <ProductCard />
@@ -339,7 +339,7 @@ export default function MyBuyPopup({
 
     const Step2Content = () => (
         <>
-            {/* Resumo do pedido */}
+            {/* Order Summary */}
             <div style={{
                 border: '1px solid #e0e0e0',
                 borderRadius: '8px',
@@ -354,7 +354,7 @@ export default function MyBuyPopup({
                     paddingBottom: '8px',
                     borderBottom: '1px solid #e0e0e0'
                 }}>
-                    Resumo do Pedido
+                    Order Summary
                 </h4>
 
                 <div style={{
@@ -385,7 +385,7 @@ export default function MyBuyPopup({
                             fontSize: '14px',
                             color: '#666'
                         }}>
-                            Quantidade: {quantity}
+                            Quantity: {quantity}
                         </div>
                     </div>
                     <div style={{
@@ -393,11 +393,12 @@ export default function MyBuyPopup({
                         color: '#2e7d32',
                         fontSize: '16px'
                     }}>
-                        R$ {subtotal.toFixed(2)}
+                        $ {subtotal.toFixed(2)}
                     </div>
                 </div>
             </div>
-            {/* Cupom de desconto */}
+
+            {/* Discount Coupon */}
             {allowCoupon && (
                 <div style={{
                     border: '1px solid #e0e0e0',
@@ -413,7 +414,7 @@ export default function MyBuyPopup({
                     }}>
                         <MdLocalOffer style={{ fontSize: '20px' }} />
                         <span style={{ fontWeight: '600', color: '#333' }}>
-                            Cupom de desconto
+                            Discount Coupon
                         </span>
                     </div>
 
@@ -423,7 +424,7 @@ export default function MyBuyPopup({
                                 <input
                                     type="text"
                                     ntpopups-css="true"
-                                    placeholder="Digite o cupom"
+                                    placeholder="Enter coupon code"
                                     value={couponCode}
                                     autoFocus="true"
                                     onChange={(e) => {
@@ -455,7 +456,7 @@ export default function MyBuyPopup({
                                         whiteSpace: 'nowrap',
                                     }}
                                 >
-                                    {couponLoading ? "Carregando" : "Aplicar"}
+                                    {couponLoading ? "Loading" : "Apply"}
                                 </button>
                             </div>
                             {couponError && (
@@ -483,8 +484,8 @@ export default function MyBuyPopup({
                                 </div>
                                 <div style={{ fontSize: '13px', color: '#558b2f' }}>
                                     {appliedCoupon.type === 'percent'
-                                        ? `${appliedCoupon.discount}% de desconto`
-                                        : `R$ ${appliedCoupon.discount.toFixed(2)} de desconto`}
+                                        ? `${appliedCoupon.discount}% discount`
+                                        : `$ ${appliedCoupon.discount.toFixed(2)} discount`}
                                 </div>
                             </div>
                             <button
@@ -500,7 +501,7 @@ export default function MyBuyPopup({
                                     fontWeight: '500'
                                 }}
                             >
-                                Remover
+                                Remove
                             </button>
                         </div>
                     )}

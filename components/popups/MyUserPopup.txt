@@ -17,11 +17,11 @@ export default function MyUserPopup({
                 <div className={popupstyles.icon}>
                     <FaUserAlt />
                 </div>
-                Perfil de {userName}
+                {userName}'s Profile
             </header>
 
             <section className={popupstyles.body}>
-                <p><b>Usuário:</b> {userName}</p>
+                <p><b>User:</b> {userName}</p>
                 <p><b>Bio:</b> {userBio}</p>
                 <p><b>Id:</b> {userId}</p>
             </section>
@@ -37,7 +37,7 @@ export default function MyUserPopup({
                         closePopup(true);
                     }}
                 >
-                    <span>Adicionar amigo</span>
+                    <span>Add Friend</span>
                 </button>
             </footer>
         </>

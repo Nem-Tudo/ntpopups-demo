@@ -35,44 +35,44 @@ a {
 }
 
 /*
- * SCROLLBAR ESTILIZADO (Site Todo)
- * Compatível com navegadores WebKit (Chrome, Safari, Edge, Opera) e Firefox.
+ * STYLIZED SCROLLBAR (Entire Site)
+ * Compatible with WebKit browsers (Chrome, Safari, Edge, Opera) and Firefox.
  */
 
-/* 1. Para navegadores WebKit (Chrome, Safari, Edge, Opera) */
+/* 1. For WebKit browsers (Chrome, Safari, Edge, Opera) */
 ::-webkit-scrollbar {
   width: 8px;
-  /* Largura da barra de rolagem vertical */
+  /* Vertical scrollbar width */
   height: 8px;
-  /* Altura da barra de rolagem horizontal */
+  /* Horizontal scrollbar height */
 }
 
-/* 2. O "trilho" (fundo) da barra de rolagem */
+/* 2. The scrollbar "track" (background) */
 ::-webkit-scrollbar-track {
   background: #f1f1f1;
-  /* Cor de fundo do trilho */
+  /* Track background color */
   border-radius: 10px;
 }
 
-/* 3. O "polegar" (thumb) - a parte que você arrasta */
+/* 3. The scrollbar "thumb" - the part you drag */
 ::-webkit-scrollbar-thumb {
   background: #747474;
-  /* Cor azul claro/roxo sutil (Tailwind indigo-200) */
+  /* Subtle light blue/purple color (Tailwind indigo-200) */
   border-radius: 10px;
 }
 
-/* 4. Cor do polegar ao passar o mouse */
+/* 4. Thumb color on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: #8f8f8f;
-  /* Cor primária (Tailwind indigo-500) */
+  /* Primary color (Tailwind indigo-500) */
 }
 
-/* 5. Estilo para o Firefox (versões mais recentes) */
+/* 5. Style for Firefox (recent versions) */
 html {
   scrollbar-width: thin;
-  /* Define a largura da barra: auto | thin | none */
+  /* Defines scrollbar width: auto | thin | none */
   scrollbar-color: #a7a7a7 #f1f1f1;
-  /* cor_thumb cor_track */
+  /* thumb_color track_color */
 }
 
 .token.operator,
