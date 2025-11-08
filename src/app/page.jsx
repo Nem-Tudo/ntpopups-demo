@@ -7,6 +7,8 @@ import { usePopupSettings } from "../../contexts/PopupSettingsContext";
 import { FaCopy, FaCheck, FaInfoCircle, FaQuestionCircle, FaEnvelope, FaCrop, FaHtml5, FaCog, FaMoon, FaSun, FaGlobe, FaChevronDown, FaChevronUp, FaTimes, FaTrashAlt, FaMagic, FaRocket, FaClock, FaBookOpen, FaBell, FaShoppingCart, FaUserCircle, FaExclamationTriangle, FaWrench, FaTags, FaLock, FaCalendarAlt, FaAddressCard, FaFileAlt, FaUserPlus, FaRegCreditCard, FaSitemap, FaKey, FaHourglassHalf, FaTimesCircle, FaChartPie, FaStar, FaPalette, FaMoneyBillWave } from 'react-icons/fa';
 import { FaCode } from "react-icons/fa";
 import { SiStagetimer } from "react-icons/si";
+import { RiNpmjsFill } from "react-icons/ri";
+
 
 // Imports from react-simple-code-editor and Prism.js library
 import Editor from "react-simple-code-editor";
@@ -1894,6 +1896,14 @@ function stopInterval() { // Best practice: ensure the interval is cleared on cl
                 className="docLink"
               >
                 <FaBookOpen size={16} /> View full documentation
+              </a>
+              <a
+                href="https://www.npmjs.com/package/ntpopups"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="docLink"
+              >
+                <RiNpmjsFill size={16} /> NPM Package
               </a>
             </div>
           </div>
